@@ -40,6 +40,7 @@ AntiGEO 是一套面向 provider 发布的 GEO 风险清单数据结构与数据
 ## Quick Start
 
 - [快速开始](./docs/quick-start.md)
+- [参考数据包](./docs/reference-package.md)
 
 ## 当前状态
 
@@ -87,6 +88,7 @@ Together these files form the current minimal package shape for pre-search filte
 ## Quick Start
 
 - [Quick Start](./docs/quick-start.md)
+- [Reference Package](./docs/reference-package.md)
 
 ## Current Status
 
