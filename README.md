@@ -4,20 +4,18 @@
 
 ---
 
-OpenAntiGEO / AntiGEO
-
 ## 中文
 
-AntiGEO 是由 **OpenAntiGEO** 维护的开源、可审计、社区治理的 **GEO 操纵风险注册表**。它用于帮助 AI 搜索、检索增强系统、答案引擎与 Agent 识别可能存在系统性操纵风险的品牌、域名、内容网络与相关实体。
+AntiGEO 是由 **OpenAntiGEO** 维护的开源、可审计、社区治理的 **GEO 操纵风险清单（registry）**。它用于帮助 AI 搜索、检索增强系统、答案引擎与智能体（Agent）识别可能存在系统性操纵风险的品牌、域名、内容网络与相关实体。
 
-本仓库主项目仅维护规则、名单、证据、提案、投票与申诉，不承载面向终端用户的插件或 SDK 实现。
+本仓库主项目仅维护规则、清单、证据、提案、投票与申诉，不承载面向终端用户的插件或 SDK 实现。
 
 ## 项目范围
 
 本仓库当前包含以下内容：
 
 - 规则与定义
-- 风险名单与注册表
+- 风险清单
 - 可复核证据
 - 社区提案
 - 投票记录
@@ -51,8 +49,8 @@ AntiGEO 是由 **OpenAntiGEO** 维护的开源、可审计、社区治理的 **G
 ```text
 AntiGEO/
 ├── docs/        项目说明、定义、治理、投票、申诉等文档
-├── schemas/     注册表、证据、提案等数据结构定义
-├── registry/    状态名单与聚合索引
+├── schemas/     清单、证据、提案等数据结构定义
+├── registry/    状态清单与聚合索引
 ├── proposals/   社区提案
 ├── evidence/    证据材料
 └── scripts/     辅助脚本
@@ -62,14 +60,14 @@ AntiGEO/
 
 - `docs/`：存放定义、治理、证据政策、投票与申诉等说明文档。
 - `schemas/`：存放实体、证据、提案等 JSON Schema。
-- `registry/`：存放 `watchlist`、`restricted`、`blocked` 及聚合索引。
+- `registry/`：存放 `watchlist`、`restricted`、`blocked` 状态清单及聚合索引。
 - `proposals/`：存放待审议或历史提案。
 - `evidence/`：存放支撑提案与状态判断的证据材料。
 - `scripts/`：存放校验、整理、生成等辅助脚本。
 
 ## 项目状态
 
-本项目仍处于**早期初始化阶段**。当前仓库以基础规则、数据结构、注册表约定和治理流程搭建为主；目录、格式与流程在保持可审计性的前提下，仍可能继续收敛和调整。
+本项目仍处于**早期初始化阶段**。当前仓库以基础规则、数据结构、清单约定和治理流程搭建为主；目录、格式与流程在保持可审计性的前提下，仍可能继续收敛和调整。
 
 ## 相关文档
 
@@ -98,7 +96,7 @@ The main repository is limited to the following:
 
 - Rules and definitions
 - Risk registries
-- Reviewable evidence
+- Verifiable evidence
 - Community proposals
 - Voting records
 - Appeals materials and procedures
@@ -122,7 +120,7 @@ This repository uses only three statuses:
 
 The project follows an evidence-based community governance process:
 
-1. Submit reviewable evidence.
+1. Submit verifiable evidence.
 2. The community reviews whether the evidence is authentic and whether it meets the project definitions.
 3. A vote determines which status, if any, should be assigned.
 

@@ -8,9 +8,9 @@
 
 ### 1. 文档目的
 
-本文件用于定义 AntiGEO 的社区治理框架、提案流转方式与注册表状态变更规则。它为提案、审核（review）、投票（voting）、申诉（appeals）与复审提供上层总规则，并说明社区如何以公开、可审计的方式处理 `watchlist`、`restricted` 与 `blocked`。
+本文件用于定义 AntiGEO 的社区治理框架、提案流转方式与清单状态变更规则。它为提案、审核（review）、投票（voting）、申诉（appeals）与复审提供上层总规则，并说明社区如何以公开、可审计的方式处理 `watchlist`、`restricted` 与 `blocked`。
 
-AntiGEO 的治理对象是 registry 中的风险状态，而不是对现实世界主体作终局裁定。
+AntiGEO 的治理对象是清单状态，而不是对现实世界主体作终局裁定。
 
 ### 2. 治理原则
 
@@ -33,7 +33,7 @@ AntiGEO 治理（governance）应遵循以下原则：
 - 新增对象
 - 状态升级
 - 状态降级
-- 从 registry 移除
+- 从清单中移除
 - 申诉 / 复审
 - 更正文档性错误或元数据错误
 
