@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openantigeo.org/schemas/evidence.schema.json",
+  "title": "AntiGEO Evidence",
+  "description": "Schema for an AntiGEO evidence record used to support entity, proposal, and status-related review.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable unique identifier for the evidence record.",
+      "pattern": "^[a-z0-9_-]+$",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "description": "Short human-readable title of the evidence record.",
+      "minLength": 1
+    },
+    "evidence_type": {
+      "type": "string",
+      "description": "Primary type of evidence represented by this record.",
+      "enum": [
+        "webpage",
+        "document",
+        "screenshot",
+        "comparison",
+        "statement",
+        "observation",
+        "archive",
+        "other"
+      ]
+    },
+    "entity_ids": {
+      "type": "array",
+      "description": "List of related entity identifiers referenced by this evidence record.",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "proposal_ids": {
+      "type": "array",
+      "description": "Optional list of related proposal identifiers.",
+      "default": [],
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "source_url": {
+      "type": "string",
+      "description": "Original source URL for the evidence, when available.",
+      "format": "uri"
+    },
+    "archive_url": {
+      "type": "string",
+      "description": "Archive URL, snapshot URL, or preservation link for the evidence, when available.",
+      "format": "uri"
+    },
+    "captured_at": {
+      "type": "string",
+      "description": "Timestamp when the evidence was captured, observed, or recorded.",
+      "format": "date-time"
+    },
+    "created_at": {
+      "type": "string",
+      "description": "Timestamp when the evidence record was created.",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "Timestamp when the evidence record was last updated.",
+      "format": "date-time"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Short summary of what the evidence shows."
+    },
+    "claims_supported": {
+      "type": "array",
+      "description": "Short claim labels or judgments supported by this evidence record.",
+      "default": [],
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "context": {
+      "type": "string",
+      "description": "Additional context needed to interpret the evidence correctly."
+    },
+    "is_public": {
+      "type": "boolean",
+      "description": "Whether the evidence is based on publicly accessible material.",
+      "default": true
+    },
+    "source_name": {
+      "type": "string",
+      "description": "Optional source name, publication name, or origin label."
+    },
+    "language": {
+      "type": "string",
+      "description": "Optional language code or language label associated with the evidence content."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional freeform notes about the evidence record."
+    },
+    "review_status": {
+      "type": "string",
+      "description": "Lightweight review state for the evidence record.",
+      "enum": [
+        "unreviewed",
+        "under_review",
+        "reviewed"
+      ]
+    },
+    "related_evidence_ids": {
+      "type": "array",
+      "description": "Optional list of related evidence record identifiers.",
+      "default": [],
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "evidence_type",
+    "entity_ids",
+    "created_at",
+    "updated_at"
+  ]
+}
