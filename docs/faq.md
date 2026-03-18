@@ -1,5 +1,9 @@
 # FAQ
 
+[中文](#中文) | [English](#english)
+
+---
+
 ## 中文
 
 ### 1. AntiGEO 是什么？
@@ -61,6 +65,8 @@ AntiGEO 采用三段式流程：先提交可复核证据，再由社区审核，
 - [CONTRIBUTING.md](../CONTRIBUTING.md)
 
 本 FAQ 会随着项目发展通过公开方式持续更新。
+
+---
 
 ## English
 

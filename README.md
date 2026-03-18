@@ -1,13 +1,11 @@
 # AntiGEO
 
-<p align="center">
-  <a href="#中文">中文</a> |
-  <a href="#english">English</a>
-</p>
+[中文](#中文) | [English](#english)
+
+---
 
 OpenAntiGEO / AntiGEO
 
-<a id="中文"></a>
 ## 中文
 
 AntiGEO 是由 **OpenAntiGEO** 维护的开源、可审计、社区治理的 **GEO 操纵风险注册表**。它用于帮助 AI 搜索、检索增强系统、答案引擎与 Agent 识别可能存在系统性操纵风险的品牌、域名、内容网络与相关实体。
@@ -86,7 +84,8 @@ AntiGEO/
 
 许可证与贡献流程请分别参见 [LICENSE](./LICENSE) 和 [CONTRIBUTING.md](./CONTRIBUTING.md)。治理相关细则以 `docs/` 目录下正式文档为准。
 
-<a id="english"></a>
+---
+
 ## English
 
 AntiGEO is an open, auditable, community-governed **GEO manipulation risk registry** maintained by **OpenAntiGEO**. It helps AI search, retrieval-augmented systems, answer engines, and agents identify brands, domains, content networks, and related entities that may present systematic manipulation risk.
