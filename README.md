@@ -69,6 +69,10 @@ AntiGEO/
 
 本项目仍处于**早期初始化阶段**。当前仓库以基础规则、数据结构、清单约定和治理流程搭建为主；目录、格式与流程在保持可审计性的前提下，仍可能继续收敛和调整。
 
+## 快速开始
+
+- [快速开始](./docs/quick-start.md)
+
 ## 相关文档
 
 - [定义说明](./docs/definition.md)
@@ -148,6 +152,10 @@ Directory overview:
 ## Project Status
 
 This project is still in the **early initialization stage**. At this stage, the repository is focused on establishing baseline rules, data structures, registry conventions, and governance procedures. Directory layout, formats, and process details may continue to evolve while preserving auditability.
+
+## Quick Start
+
+- [Quick Start](./docs/quick-start.md)
 
 ## Documents
 
