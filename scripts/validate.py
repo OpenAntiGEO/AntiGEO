@@ -9,7 +9,9 @@ from typing import Any
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
-SCHEMA_PATH = ROOT_DIR / "schemas" / "entity.schema.json"
+ENTITY_SCHEMA_PATH = ROOT_DIR / "schemas" / "entity.schema.json"
+EVIDENCE_SCHEMA_PATH = ROOT_DIR / "schemas" / "evidence.schema.json"
+PROPOSAL_SCHEMA_PATH = ROOT_DIR / "schemas" / "proposal.schema.json"
 REGISTRY_FILES = [
     ROOT_DIR / "registry" / "watchlist.json",
     ROOT_DIR / "registry" / "restricted.json",
@@ -23,6 +25,8 @@ TAG_INTENT_INDEX_PATH = ROOT_DIR / "registry" / "tag-intent-to-entities.json"
 TAG_RISK_INDEX_PATH = ROOT_DIR / "registry" / "tag-risk-to-entities.json"
 DOMAIN_INDEX_PATH = ROOT_DIR / "registry" / "domain-to-entities.json"
 NAME_INDEX_PATH = ROOT_DIR / "registry" / "name-to-entities.json"
+SAMPLE_EVIDENCE_PATH = ROOT_DIR / "evidence" / "sample-evidence.json"
+SAMPLE_PROPOSALS_PATH = ROOT_DIR / "proposals" / "sample-proposals.json"
 
 REQUIRED_COMPACT_FIELDS = [
     "id",
@@ -77,31 +81,39 @@ def expect_array(data: Any, source_name: str, label: str) -> list[Any] | None:
     return data
 
 
-def collect_entity_ids(entities: list[Any], source_name: str) -> tuple[set[str], bool]:
-    entity_ids: set[str] = set()
+def collect_ids(
+    records: list[Any],
+    source_name: str,
+    id_field: str = "id",
+) -> tuple[set[str], bool]:
+    record_ids: set[str] = set()
     has_error = False
 
-    for index, entity in enumerate(entities):
-        if not isinstance(entity, dict):
+    for index, record in enumerate(records):
+        if not isinstance(record, dict):
             print(f"ERROR: {source_name}: index={index}: expected object")
             has_error = True
             continue
 
-        entity_id = entity.get("id")
-        if not isinstance(entity_id, str) or not entity_id.strip():
-            print(f"ERROR: {source_name}: index={index}: missing or invalid id")
+        record_id = record.get(id_field)
+        if not isinstance(record_id, str) or not record_id.strip():
+            print(f"ERROR: {source_name}: index={index}: missing or invalid {id_field}")
             has_error = True
             continue
 
-        normalized_id = entity_id.strip()
-        if normalized_id in entity_ids:
-            print(f"ERROR: {source_name}: duplicate id: {normalized_id}")
+        normalized_id = record_id.strip()
+        if normalized_id in record_ids:
+            print(f"ERROR: {source_name}: duplicate {id_field}: {normalized_id}")
             has_error = True
             continue
 
-        entity_ids.add(normalized_id)
+        record_ids.add(normalized_id)
 
-    return entity_ids, not has_error
+    return record_ids, not has_error
+
+
+def collect_entity_ids(entities: list[Any], source_name: str) -> tuple[set[str], bool]:
+    return collect_ids(entities, source_name, "id")
 
 
 def validate_entities(
@@ -131,6 +143,39 @@ def validate_entities(
         print(f"OK: {source_name}")
 
     return not has_error
+
+
+def validate_records(
+    data: Any,
+    validator: Draft202012Validator,
+    source_name: str,
+    record_label: str,
+    id_field: str = "id",
+) -> tuple[bool, list[Any], set[str]]:
+    records = expect_array(data, source_name, f"an array of {record_label}")
+    if records is None:
+        return False, [], set()
+
+    has_error = False
+
+    for index, record in enumerate(records):
+        record_id = "<unknown>"
+        if isinstance(record, dict):
+            record_id = str(record.get(id_field, "<unknown>"))
+
+        errors = sorted(validator.iter_errors(record), key=lambda err: list(err.path))
+        for error in errors:
+            has_error = True
+            path_str = format_error_path(error)
+            print(
+                f"ERROR: {source_name}: index={index} id={record_id} "
+                f"path={path_str}: {error.message}"
+            )
+
+    record_ids, ids_ok = collect_ids(records, source_name, id_field=id_field)
+    has_error = has_error or not ids_ok
+
+    return not has_error, records, record_ids
 
 
 def validate_compact_entities(
@@ -281,6 +326,50 @@ def validate_index_map(
     return not has_error
 
 
+def validate_reference_ids(
+    records: list[Any],
+    source_name: str,
+    field_name: str,
+    allowed_ids: set[str],
+) -> bool:
+    has_error = False
+
+    for index, record in enumerate(records):
+        record_id = "<unknown>"
+        if isinstance(record, dict):
+            record_id = str(record.get("id", "<unknown>"))
+
+        values = record.get(field_name) if isinstance(record, dict) else None
+        if values is None:
+            continue
+
+        if not isinstance(values, list):
+            print(
+                f"ERROR: {source_name}: index={index} id={record_id}: "
+                f"{field_name}: expected array"
+            )
+            has_error = True
+            continue
+
+        for value in values:
+            if not isinstance(value, str):
+                print(
+                    f"ERROR: {source_name}: index={index} id={record_id}: "
+                    f"{field_name}: expected string id"
+                )
+                has_error = True
+                continue
+
+            if value not in allowed_ids:
+                print(
+                    f"ERROR: {source_name}: index={index} id={record_id}: "
+                    f"{field_name}: unknown id: {value}"
+                )
+                has_error = True
+
+    return not has_error
+
+
 def main() -> int:
     try:
         from jsonschema import Draft202012Validator
@@ -290,8 +379,12 @@ def main() -> int:
         return 1
 
     try:
-        schema = load_json(SCHEMA_PATH)
-        validator = Draft202012Validator(schema)
+        entity_schema = load_json(ENTITY_SCHEMA_PATH)
+        evidence_schema = load_json(EVIDENCE_SCHEMA_PATH)
+        proposal_schema = load_json(PROPOSAL_SCHEMA_PATH)
+        validator = Draft202012Validator(entity_schema)
+        evidence_validator = Draft202012Validator(evidence_schema)
+        proposal_validator = Draft202012Validator(proposal_schema)
     except (FileNotFoundError, ValueError) as exc:
         print(f"ERROR: {exc}")
         return 1
@@ -347,6 +440,8 @@ def main() -> int:
         tag_risk_index = load_json(TAG_RISK_INDEX_PATH)
         domain_index = load_json(DOMAIN_INDEX_PATH)
         name_index = load_json(NAME_INDEX_PATH)
+        sample_evidence = load_json(SAMPLE_EVIDENCE_PATH)
+        sample_proposals = load_json(SAMPLE_PROPOSALS_PATH)
     except (FileNotFoundError, ValueError) as exc:
         print(f"ERROR: {exc}")
         return 1
@@ -409,11 +504,54 @@ def main() -> int:
         and all_ok
     )
 
+    evidence_ok, evidence_records, evidence_ids = validate_records(
+        sample_evidence,
+        evidence_validator,
+        "evidence/sample-evidence.json",
+        "evidence records",
+    )
+    evidence_refs_ok = validate_reference_ids(
+        evidence_records,
+        "evidence/sample-evidence.json",
+        "entity_ids",
+        full_index_ids,
+    )
+    if evidence_ok and evidence_refs_ok:
+        print("OK: evidence/sample-evidence.json")
+    all_ok = evidence_ok and evidence_refs_ok and all_ok
+
+    proposal_ok, proposal_records, _proposal_ids = validate_records(
+        sample_proposals,
+        proposal_validator,
+        "proposals/sample-proposals.json",
+        "proposal records",
+    )
+    proposal_entity_refs_ok = validate_reference_ids(
+        proposal_records,
+        "proposals/sample-proposals.json",
+        "entity_ids",
+        full_index_ids,
+    )
+    proposal_evidence_refs_ok = validate_reference_ids(
+        proposal_records,
+        "proposals/sample-proposals.json",
+        "evidence_ids",
+        evidence_ids,
+    )
+    if proposal_ok and proposal_entity_refs_ok and proposal_evidence_refs_ok:
+        print("OK: proposals/sample-proposals.json")
+    all_ok = (
+        proposal_ok
+        and proposal_entity_refs_ok
+        and proposal_evidence_refs_ok
+        and all_ok
+    )
+
     if not all_ok:
         print("Validation failed.")
         return 1
 
-    print("All entity registry files passed validation.")
+    print("All entity, release, evidence, and proposal files passed validation.")
     return 0
 
 
