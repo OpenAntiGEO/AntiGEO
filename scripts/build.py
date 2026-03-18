@@ -16,8 +16,24 @@ REGISTRY_FILES = [
     ROOT_DIR / "registry" / "blocked.json",
 ]
 FULL_INDEX_PATH = ROOT_DIR / "registry" / "full-index.json"
+ENTITIES_COMPACT_PATH = ROOT_DIR / "registry" / "entities.compact.json"
+MANIFEST_PATH = ROOT_DIR / "registry" / "manifest.json"
 
 VERSION = "0.1.0-dev"
+COMPACT_ENTITY_FIELDS = [
+    "id",
+    "name",
+    "entity_type",
+    "aliases",
+    "domains",
+    "current_status",
+    "summary",
+    "tags_topic",
+    "tags_intent",
+    "tags_risk",
+    "status_reason",
+    "related_entities",
+]
 
 
 def load_json_array(path: Path) -> list[Any]:
@@ -103,11 +119,59 @@ def utc_now_iso_z() -> str:
     )
 
 
-def build_full_index(entities: list[Any]) -> dict[str, Any]:
+def compact_entity(entity: dict[str, Any]) -> dict[str, Any]:
+    compact = {field: entity.get(field) for field in COMPACT_ENTITY_FIELDS}
+
+    for field in (
+        "aliases",
+        "domains",
+        "tags_topic",
+        "tags_intent",
+        "tags_risk",
+        "related_entities",
+    ):
+        value = compact.get(field)
+        compact[field] = value if isinstance(value, list) else []
+
+    return compact
+
+
+def build_full_index(entities: list[Any], generated_at: str) -> dict[str, Any]:
     return {
         "version": VERSION,
-        "generated_at": utc_now_iso_z(),
+        "generated_at": generated_at,
         "entities": entities,
+    }
+
+
+def build_compact_entities(entities: list[Any]) -> list[dict[str, Any]]:
+    compact_entities: list[dict[str, Any]] = []
+
+    for entity in entities:
+        if not isinstance(entity, dict):
+            continue
+        compact_entities.append(compact_entity(entity))
+
+    return compact_entities
+
+
+def build_manifest(
+    generated_at: str,
+    counts_by_status: dict[str, int],
+    entity_count: int,
+) -> dict[str, Any]:
+    return {
+        "version": VERSION,
+        "generated_at": generated_at,
+        "entity_count": entity_count,
+        "counts_by_status": counts_by_status,
+        "files": {
+            "watchlist": "registry/watchlist.json",
+            "restricted": "registry/restricted.json",
+            "blocked": "registry/blocked.json",
+            "full_index": "registry/full-index.json",
+            "entities_compact": "registry/entities.compact.json",
+        },
     }
 
 
@@ -121,9 +185,11 @@ def write_json(path: Path, data: Any) -> None:
 def main() -> int:
     loaded_sources: list[tuple[str, list[Any]]] = []
     merged_entities: list[Any] = []
+    counts_by_status: dict[str, int] = {}
 
     for path in REGISTRY_FILES:
         source_name = str(path.relative_to(ROOT_DIR))
+        status_name = path.stem
         try:
             entities = load_json_array(path)
         except (FileNotFoundError, ValueError) as exc:
@@ -139,6 +205,7 @@ def main() -> int:
 
         loaded_sources.append((source_name, entities))
         merged_entities.extend(entities)
+        counts_by_status[status_name] = len(entities)
         print(f"Loaded {source_name}")
 
     try:
@@ -152,19 +219,29 @@ def main() -> int:
             print(f"ERROR: {message}")
         return 1
 
-    full_index = build_full_index(merged_entities)
+    generated_at = utc_now_iso_z()
+    full_index = build_full_index(merged_entities, generated_at)
+    compact_entities = build_compact_entities(merged_entities)
+    manifest = build_manifest(
+        generated_at=generated_at,
+        counts_by_status=counts_by_status,
+        entity_count=len(merged_entities),
+    )
 
     try:
         write_json(FULL_INDEX_PATH, full_index)
+        write_json(ENTITIES_COMPACT_PATH, compact_entities)
+        write_json(MANIFEST_PATH, manifest)
     except OSError as exc:
-        print(f"ERROR: Failed to write {FULL_INDEX_PATH.relative_to(ROOT_DIR)}: {exc}")
+        print(f"ERROR: Failed to write build output: {exc}")
         return 1
 
     print(f"Wrote {FULL_INDEX_PATH.relative_to(ROOT_DIR)}")
+    print(f"Wrote {ENTITIES_COMPACT_PATH.relative_to(ROOT_DIR)}")
+    print(f"Wrote {MANIFEST_PATH.relative_to(ROOT_DIR)}")
     print("Build completed successfully.")
     return 0
 
 
 if __name__ == "__main__":
     sys.exit(main())
-

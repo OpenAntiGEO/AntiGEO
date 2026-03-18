@@ -1,0 +1,17 @@
+{
+  "version": "0.1.0-dev",
+  "generated_at": "2026-03-18T11:03:28Z",
+  "entity_count": 5,
+  "counts_by_status": {
+    "watchlist": 2,
+    "restricted": 2,
+    "blocked": 1
+  },
+  "files": {
+    "watchlist": "registry/watchlist.json",
+    "restricted": "registry/restricted.json",
+    "blocked": "registry/blocked.json",
+    "full_index": "registry/full-index.json",
+    "entities_compact": "registry/entities.compact.json"
+  }
+}
