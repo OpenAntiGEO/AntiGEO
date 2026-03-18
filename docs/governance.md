@@ -69,6 +69,10 @@ AntiGEO 的基本治理流程如下：
 
 `watchlist`、`restricted` 与 `blocked` 均不是永久状态。状态可以升级、降级或移除。
 
+对于新对象的首次提案，AntiGEO 不预设固定起始状态。首次提案可以直接建议进入 `watchlist`、`restricted` 或 `blocked` 中的任一状态；最终进入哪个状态，应由现有证据强度、可复核性与社区判断共同决定，而不是由“首次出现”这一事实单独决定。
+
+对于更高强度的状态，社区应适用更谨慎的审核标准。换言之，首次提案并不当然只能先进入 `watchlist`，但若提案直接建议 `restricted` 或 `blocked`，则更需要有足够强、可复核且与状态强度相匹配的证据基础。
+
 状态变更通常应基于以下因素之一或其组合：
 
 - 新增证据
@@ -189,6 +193,10 @@ The preliminary review is mainly concerned with whether the materials are comple
 ### 6. Rules for Status Changes
 
 `watchlist`, `restricted`, and `blocked` are not permanent states. A status may be upgraded, downgraded, or removed.
+
+For a first proposal involving a new entity, AntiGEO does not assume a fixed entry status. An initial proposal may directly recommend `watchlist`, `restricted`, or `blocked`; the appropriate status should be determined by the strength of the available evidence, its verifiability, and the community's judgment, rather than by the fact that the entity is being proposed for the first time.
+
+Higher-severity statuses should be reviewed with greater caution. In other words, an initial proposal is not required to begin at `watchlist`, but a proposal that directly seeks `restricted` or `blocked` should rest on evidence that is sufficiently strong, verifiable, and proportionate to the severity of the proposed status.
 
 Status changes should generally be based on one or more of the following:
 

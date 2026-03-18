@@ -37,6 +37,8 @@ AntiGEO 的投票不是为了表达品牌好恶，也不是为了对现实世界
 正式投票至少可以处理以下事项：
 
 - 是否将对象加入 `watchlist`
+- 是否在首次提案时直接将对象加入 `restricted`
+- 是否在首次提案时直接将对象加入 `blocked`
 - 是否将状态从 `watchlist` 升级到 `restricted`
 - 是否将状态从 `restricted` 升级到 `blocked`
 - 是否降级状态
@@ -54,6 +56,8 @@ AntiGEO 的投票不是为了表达品牌好恶，也不是为了对现实世界
 - 状态强度应与证据强度匹配
 - 区分“值得关注”与“足以更高强度处理”
 - 避免品牌偏好、竞争立场或情绪化判断
+
+投票不应机械地假设新对象必须先进入 `watchlist`。若现有证据已经足够强，首次提案也可以直接对 `restricted` 或 `blocked` 进行表决；但状态越高强度，投票判断就越应谨慎，重点仍在于证据强度是否与状态强度相匹配。
 
 对于更高强度的状态，尤其应更加谨慎。证据不足以支持更高强度状态时，不应仅因主观风险感受而提高处理等级。
 
@@ -146,6 +150,8 @@ Any proposal without sufficient verifiable evidence should not proceed to formal
 Formal voting may resolve at least the following:
 
 - Whether to add an entity to `watchlist`
+- Whether to place a newly proposed entity directly into `restricted`
+- Whether to place a newly proposed entity directly into `blocked`
 - Whether to upgrade a status from `watchlist` to `restricted`
 - Whether to upgrade a status from `restricted` to `blocked`
 - Whether to downgrade a status
@@ -163,6 +169,8 @@ The community should follow these principles during voting:
 - Evidence strength should match status severity
 - Distinguish between a matter worth watching and one that justifies stronger treatment
 - Avoid voting based on brand preference, competitive motives, or emotion
+
+Voting should not mechanically assume that a newly proposed entity must enter `watchlist` first. If the available evidence is already strong enough, an initial proposal may be voted on directly for `restricted` or `blocked`; however, the more severe the proposed status, the more cautious the voting judgment should be, with the central question remaining whether the evidence strength is proportionate to the severity of the status.
 
 Higher-severity statuses require greater caution. Where the evidence does not support a stronger status, the community should not elevate the outcome based only on subjective risk perception.
 
