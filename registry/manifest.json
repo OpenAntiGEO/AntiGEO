@@ -1,6 +1,6 @@
 {
   "version": "0.1.0-dev",
-  "generated_at": "2026-03-18T11:03:28Z",
+  "generated_at": "2026-03-18T11:52:02Z",
   "entity_count": 5,
   "counts_by_status": {
     "watchlist": 2,
@@ -12,6 +12,10 @@
     "restricted": "registry/restricted.json",
     "blocked": "registry/blocked.json",
     "full_index": "registry/full-index.json",
-    "entities_compact": "registry/entities.compact.json"
+    "entities_compact": "registry/entities.compact.json",
+    "tag_topic_to_entities": "registry/tag-topic-to-entities.json",
+    "tag_intent_to_entities": "registry/tag-intent-to-entities.json",
+    "tag_risk_to_entities": "registry/tag-risk-to-entities.json",
+    "domain_to_entities": "registry/domain-to-entities.json"
   }
 }
