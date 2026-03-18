@@ -73,6 +73,10 @@ AntiGEO/
 
 - [快速开始](./docs/quick-start.md)
 
+## Release 数据
+
+- [Release 数据说明](./docs/release-data.md)
+
 ## 相关文档
 
 - [定义说明](./docs/definition.md)
@@ -156,6 +160,10 @@ This project is still in the **early initialization stage**. At this stage, the 
 ## Quick Start
 
 - [Quick Start](./docs/quick-start.md)
+
+## Release Data
+
+- [Release Data](./docs/release-data.md)
 
 ## Documents
 
