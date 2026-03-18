@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read project documentation first
+    url: https://github.com/OpenAntiGEO/AntiGEO/blob/main/README.md
+    about: Please read README, definition, governance, evidence-policy, voting, appeals, CONTRIBUTING, and FAQ before opening an issue.
