@@ -16,6 +16,8 @@ AntiGEO 当前的 release 数据应理解为 provider package 的一种标准化
 
 因此，这些文件既可以来自主项目，也可以来自任何兼容 AntiGEO 规范的 provider。consumer 面向的是格式兼容的数据源，而不是某一个唯一仓库。
 
+当前 release 数据的核心消费文件主要围绕 entity 与索引组织。evidence / proposal 当前不属于 consumer 的必需链路，也不应被理解为所有 provider 必须导出的文件。
+
 ### 3. 总体设计思路
 
 当前 release 数据分为两层：
@@ -111,6 +113,8 @@ AntiGEO 当前的 release 数据应理解为 provider package 的一种标准化
 
 当前 release 数据主要覆盖 entity registry 与其对应的轻量索引导出。evidence 与 proposal 目前已经有 schema 和参考样例数据，但尚未进入当前 release 索引层。
 
+因此，provider 最低只需发布核心 entity package，就可以被当前 consumer 模型消费。evidence / proposal 可以作为可选治理扩展随 provider 一起发布，但不属于当前 release 的强制必需部分。
+
 因此，当前结构仍处于早期阶段，但已经足以支撑最小消费链路：
 
 - 搜索前初筛
@@ -132,6 +136,8 @@ This document explains which files are currently exported as AntiGEO release dat
 The current AntiGEO release data should be understood as a standardized provider package format. The main repository currently produces a reference package as a reference implementation for schemas, index formats, tooling, and consumption patterns, but other providers may publish their own packages in the same format.
 
 That means these files may come either from the main project or from any AntiGEO-compatible provider. Consumers are designed to work with format-compatible data sources rather than with a single mandatory repository.
+
+The core consumable files in the current release layer are organized around entities and indexes. Evidence and proposals are not part of the mandatory consumer path today and should not be treated as files that every provider must export.
 
 ### 3. Overall Design
 
@@ -227,6 +233,8 @@ That is also the current emphasis of the main project: provide specifications, t
 ### 8. Current Scope
 
 The current release layer mainly covers the entity registry and its lightweight indexes. Evidence and proposal data already have schemas and sample records, but they are not yet part of the current release index layer.
+
+That means a provider can publish only the core entity package and still be consumable by the current model. Evidence and proposals may be published as optional governance extensions, but they are not mandatory parts of the current release contract.
 
 The structure is therefore still early-stage, but it is already sufficient for a minimal workflow:
 

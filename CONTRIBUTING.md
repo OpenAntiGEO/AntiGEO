@@ -12,6 +12,8 @@
 
 主项目欢迎贡献，但不要求所有清单都提交到本仓库。若你希望长期维护自己的清单来源，也完全可以基于 AntiGEO 规范建立独立 provider 仓库或独立数据源。
 
+当前贡献也可以大致分为两类：核心规范层贡献，以及可选治理扩展层贡献。
+
 ### 2. 当前最需要的贡献
 
 当前主项目尤其欢迎以下类型的贡献：
@@ -23,6 +25,8 @@
 - 改进定义、治理、provider 模式与 FAQ 文档
 - 提高术语一致性、可读性和项目边界清晰度
 
+其中，entity schema、override schema、release 数据格式、manifest、compact entities、索引和 consumer 优先级模型属于当前核心规范层；evidence、proposal、governance、appeals、voting 则更接近可选治理扩展层。
+
 ### 3. 如果你想维护自己的 provider
 
 如果你的目标是维护一份独立风险清单来源，推荐做法通常是：
@@ -33,6 +37,8 @@
 - 自行决定 provider 的审核、更新与发布节奏
 
 换言之，AntiGEO 主项目更像公共规范与参考实现，而不是所有清单内容的唯一汇总点。
+
+如果你想做一个轻量 provider，并不需要一次性实现 evidence、voting、appeals 等全套治理模块；只要核心 package 与 consumer 兼容，就已经可以工作。若你希望提供更高透明度或更强可解释性，则可以进一步采用这些可选扩展。
 
 ### 4. 提交前建议阅读
 
@@ -107,6 +113,8 @@ Contributions to AntiGEO are welcome. The main repository is currently best unde
 
 The main project welcomes contributions, but it does not require all registry content to be submitted here. If you want to maintain your own long-lived registry source, you can build an independent provider repository or data source on top of AntiGEO conventions.
 
+At a high level, contributions can also be understood as belonging either to the core specification layer or to the optional governance-extension layer.
+
 ### 2. What Contributions Are Most Useful Right Now
 
 The main project is especially interested in:
@@ -118,6 +126,8 @@ The main project is especially interested in:
 - improving definitions, governance, provider-model, and FAQ documentation
 - making terminology, readability, and project boundaries clearer
 
+Within that structure, the entity schema, override schema, release-data format, manifest, compact entities, indexes, and consumer priority model belong to the current core specification layer, while evidence, proposals, governance, appeals, and voting belong more naturally to the optional governance-extension layer.
+
 ### 3. If You Want To Maintain Your Own Provider
 
 If your goal is to maintain an independent risk-registry source, the usual approach is:
@@ -128,6 +138,8 @@ If your goal is to maintain an independent risk-registry source, the usual appro
 - define your own review, update, and publication cadence
 
 In other words, the main AntiGEO repository is better treated as a public specification and reference implementation than as the single required home for all registry content.
+
+If you want to build a lightweight provider, you do not need to implement the full evidence / voting / appeals stack all at once. As long as the core package is compatible with the current consumer model, it can already work. If you want to offer higher transparency or stronger explainability, you can adopt those optional extensions as well.
 
 ### 4. Recommended Reading Before Contributing
 

@@ -12,6 +12,8 @@
 
 本文件首先约束主项目自身仓库内容；外部 provider 可以参考这套框架，也可以在兼容 AntiGEO 数据格式的前提下采用自己的治理实践。
 
+因此，本文件应被理解为主项目的 reference governance model，而不是所有 provider 的强制统一治理模板。
+
 ### 2. 主项目治理的对象
 
 当前主项目治理的对象主要包括：
@@ -23,6 +25,8 @@
 - release 数据格式与消费模型文档
 
 主项目不是所有 provider 的唯一治理中心。它治理的是自己的 reference implementation 和参考内容，而不是替所有 provider 统一裁决具体清单。
+
+对于只实现核心 package 的轻量 provider，本文件中的很多治理模块也可以不被完整采用。
 
 ### 3. 治理原则
 
@@ -103,6 +107,8 @@ This document defines the governance framework for the AntiGEO main project and 
 
 This document primarily governs the main repository itself. External providers may follow this framework, but they may also adopt their own governance practices as long as they remain compatible with AntiGEO data conventions.
 
+It should therefore be read as the main project's reference governance model rather than as a mandatory unified governance template for every provider.
+
 ### 2. What The Main Project Governs
 
 The current governance scope of the main project mainly includes:
@@ -114,6 +120,8 @@ The current governance scope of the main project mainly includes:
 - release-data formats and consumer guidance
 
 The main project is not the sole governance center for every provider. It governs its own reference implementation and sample contents rather than issuing centralized decisions for all registries everywhere.
+
+For lightweight providers that implement only the core package, many of the governance modules described here may also be adopted only partially or not at all.
 
 ### 3. Governance Principles
 

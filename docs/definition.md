@@ -10,6 +10,8 @@
 
 本文件用于定义 AntiGEO 的核心术语、适用范围、边界与判断基础。它同时说明 AntiGEO 当前关注的是风险清单的数据与治理模型，而不是由主项目垄断具体清单内容。
 
+本文件中的核心定义适用于 AntiGEO 风险清单模型本身；至于具体治理流程、证据透明度、申诉深度与投票方式，则可以因 provider 而异。
+
 ### 2. 什么是 GEO manipulation risk
 
 在 AntiGEO 语境下，**GEO 操纵风险**是指某一对象通过可规模化、可复制、可组织化的方法，影响 AI 搜索、AI 摘要、答案引擎、检索增强系统、智能体或类似下游系统的来源选择、排序、曝光或呈现，从而造成失真曝光、品牌偏置、竞争压制或用户误导的风险。
@@ -87,6 +89,8 @@ AntiGEO 不把一般性的内容质量问题或正常品牌建设活动直接等
 
 AntiGEO 当前定义的是一套风险清单的数据与治理模型。主项目可以提供参考数据，但不垄断具体清单内容。任何 provider 只要遵守相同的定义框架、schema 和 release 数据格式，都可以发布自己的数据源。
 
+在这一前提下，不同 provider 可以选择不同治理深度。有些 provider 可能公开 evidence、proposal、appeals 或 voting 记录；有些 provider 只提供核心 package。
+
 因此，consumer 使用的是 AntiGEO 兼容格式，而不是必须依附主项目仓库本身。主项目当前更接近 reference implementation / reference provider，而不是唯一来源。
 
 ### 9. 与状态模型的关系
@@ -114,6 +118,8 @@ AntiGEO 当前不以以下事项为目标：
 ### 1. Purpose of This Document
 
 This document defines the core terms, scope, boundaries, and interpretive basis of AntiGEO. It also clarifies that AntiGEO is currently focused on a risk-registry data and governance model rather than on monopolizing concrete registry content through the main repository.
+
+The core definitions in this document apply to the AntiGEO risk-registry model itself. Specific governance flow, evidence transparency, appeal depth, or voting style may still vary from one provider to another.
 
 ### 2. What GEO Manipulation Risk Means
 
@@ -191,6 +197,8 @@ Where evidence is insufficient, the project should avoid strong conclusions.
 ### 8. Relationship to the Provider Model
 
 AntiGEO currently defines a risk-registry data and governance model. The main project may provide reference data, but it does not monopolize concrete registry content. Any provider that follows the same definition framework, schemas, and release-data conventions may publish its own data source.
+
+Under that model, providers may choose different governance depth. Some may publish evidence, proposals, appeals, or voting records openly, while others may publish only the core package.
 
 That means consumers use AntiGEO-compatible formats rather than depending on the main repository itself. The main project is better understood today as a reference implementation / reference provider than as the only source of truth.
 
