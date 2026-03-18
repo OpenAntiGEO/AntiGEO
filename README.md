@@ -6,200 +6,92 @@
 
 ## 中文
 
-AntiGEO 是一个开源、可审计、社区治理的 GEO 风险清单规范与参考实现项目。主项目当前重点提供数据结构规范、索引与 release 数据格式、校验与构建工具、参考样例数据，以及面向 consumer 的消费模型与覆盖优先级建议。
+AntiGEO 是一套面向 provider 发布的 GEO 风险清单数据结构与数据包格式。当前仓库是一个最小 `reference implementation`，用于说明 package 结构、基础 schema、参考数据和最小工具链。
 
-AntiGEO 主项目并不追求维护唯一、中心化、全局权威的名单。具体风险清单可以由不同 provider 独立发布；consumer 与用户可以自行选择信任并订阅哪些 provider；用户本地白名单、本地 blocklist 和本地 override 的优先级应高于外部 provider 数据。
+## 当前仓库提供什么
 
-在当前 provider 模式下，项目还可以进一步区分为“核心必需层”和“可选治理扩展层”。前者是 provider / consumer 互通所必需的部分；后者用于提升透明度、可解释性和治理深度，但不是所有 provider 的强制要求。
+- `schemas/entity.schema.json`：entity 数据结构定义
+- `schemas/override.schema.json`：override 数据结构定义
+- `registry/`：reference registry data 与当前 package 导出
+- `scripts/build.py`：构建脚本
+- `scripts/validate.py`：校验脚本
+- `docs/quick-start.md`：快速开始说明
+- `requirements.txt`：当前最小 Python 依赖
 
-## 主项目提供什么
+## 基本模型
 
-- `schemas/`：entity、evidence、proposal 等数据结构规范。
-- `scripts/`：当前的构建与校验工具，用于生成和检查 reference package。
-- `registry/`：当前 reference package 的 entity 样例与 release 导出。
-- `evidence/` 与 `proposals/`：与 entity 关联的参考样例数据。
-- `docs/`：定义、治理、provider 模式、release 数据格式和消费建议。
+- provider 发布符合 AntiGEO 格式的数据包
+- consumer 加载一个或多个 provider 数据包
+- 用户本地白名单、本地 blocklist 与本地 override 的优先级高于外部 provider 数据
 
-当前仓库中的 registry、sample evidence、sample proposals 以及 build 生成的导出文件，都应理解为 reference implementation / reference package，而不是唯一官方裁决结果。
+当前主仓库不追求维护唯一、中心化的统一名单。它更关注格式、兼容性和最小可消费链路。
 
-## 核心必需层与可选治理扩展层
+## 当前数据包文件
 
-当前核心必需层主要包括：
+当前 `registry/` 目录中的主要文件类型包括：
 
-- entity schema
-- override schema
-- provider package / release 数据格式
-- `manifest`
-- `entities.compact`
-- topic / intent / risk / domain / name 索引
-- consumer 侧优先级模型
+- `full-index.json`
+- `entities.compact.json`
+- `manifest.json`
+- topic / intent / risk / domain / name 各类索引文件
 
-当前可选治理扩展层主要包括：
+这些文件共同构成当前最小 package 形态，用于支持搜索前初筛与搜索后命中场景。
 
-- evidence
-- proposal
-- governance
-- appeals
-- voting
-
-这意味着 provider 最低只需实现核心数据层，即可被当前 consumer 模型消费。当前仓库继续保留 evidence / proposal 的 schema 与样例，以及 governance / appeals / voting 文档，作为可选治理扩展和 reference implementation 的一部分。
-
-## Provider 模式
-
-在 AntiGEO 里，provider 指的是按 AntiGEO 规范发布数据包的开发者、团队或社区维护数据源。不同 provider 可以共享同一套 schema、索引格式和消费模型，但维护各自的数据内容、审核节奏和治理实践。
-
-这意味着 consumer 面向的是“符合 AntiGEO 格式的数据源”，而不是必须依赖主项目自身仓库。主项目当前可以被视为一个 reference provider / reference package，但并不垄断具体清单内容。
-
-## 用户控制优先级
-
-AntiGEO 关心的是可互操作的数据格式与消费模型，不替用户夺走最终控制权。当前推荐的优先级思想是：
-
-1. 用户本地白名单
-2. 用户本地 blocklist
-3. 用户本地 override
-4. 外部 provider 数据
-
-主项目和 provider 都只是输入源；最终采用哪份数据、如何合并、如何覆盖，应由 consumer 或终端用户决定。
-
-## 当前仓库内容
-
-```text
-AntiGEO/
-├── docs/        项目说明、定义、治理、provider 模式、release 数据说明
-├── schemas/     entity、evidence、proposal 等数据结构规范
-├── registry/    reference registry 与 release 导出
-├── evidence/    reference evidence 样例
-├── proposals/   reference proposal 样例
-└── scripts/     构建与校验工具
-```
-
-当前已经建立的主干包括：
-
-- entity / evidence / proposal 的基础 schema
-- reference entity registry 与 compact/index/release 导出
-- 基础 build / validate 链路
-- 搜索前初筛与搜索后治理的最小消费模型
-
-其中 evidence / proposal 当前仍主要处于治理与审查层的参考样例状态；build / validate 目前主要围绕 entity registry 与 release 数据层。
-
-## 从哪里开始
+## Quick Start
 
 - [快速开始](./docs/quick-start.md)
-- [Release 数据说明](./docs/release-data.md)
-- [Provider 模式](./docs/provider-model.md)
-- [定义说明](./docs/definition.md)
-- [治理规则](./docs/governance.md)
-- [证据政策](./docs/evidence-policy.md)
-- [投票规则](./docs/voting.md)
-- [申诉说明](./docs/appeals.md)
-- [常见问题](./docs/faq.md)
-- [贡献指南](./CONTRIBUTING.md)
 
-## 项目状态
+## 当前状态
 
-AntiGEO 仍处于早期阶段，但主干框架已经建立。当前主项目更像一个规范层、参考实现和参考数据包，而不是单一中心化名单服务。随着后续实践，schema、reference package、provider model 文档和消费建议都可能继续公开收敛与完善。
+项目当前仍处于早期阶段。当前仓库主要承担最小规范与参考实现的角色；后续可以继续演进，但当前重点是保持格式清晰、结构简单、输出可消费。
 
-## 许可与协作
+## 许可
 
-许可证与贡献方式请分别参见 [LICENSE](./LICENSE) 和 [CONTRIBUTING.md](./CONTRIBUTING.md)。如需理解当前 release 导出与 provider 关系，建议优先阅读 [docs/release-data.md](./docs/release-data.md) 与 [docs/provider-model.md](./docs/provider-model.md)。
+- [LICENSE](./LICENSE)
 
 ---
 
 ## English
 
-AntiGEO is an open, auditable, community-governed GEO risk registry specification and reference implementation project. The main repository currently focuses on data schemas, index and release data formats, validation and build tools, sample reference data, and consumption guidance for downstream consumers.
+AntiGEO is a GEO risk-registry data structure and package format for providers. This repository is a minimal `reference implementation` that demonstrates the package shape, foundational schemas, reference data, and the smallest useful toolchain.
 
-The main project does not aim to maintain a single centralized or globally authoritative list. Concrete risk registries may be published by different providers; consumers and users may choose which providers to trust and subscribe to; and local user allowlists, local blocklists, and local overrides should take precedence over external provider data.
+## What This Repository Provides
 
-Within the current provider model, the project can also be framed as having a core required layer and an optional governance-extension layer. The first is what providers and consumers need in order to interoperate; the second improves transparency, explainability, and governance depth, but is not mandatory for every provider.
+- `schemas/entity.schema.json`: the entity schema
+- `schemas/override.schema.json`: the override schema
+- `registry/`: reference registry data and current package exports
+- `scripts/build.py`: the build script
+- `scripts/validate.py`: the validation script
+- `docs/quick-start.md`: the quick-start guide
+- `requirements.txt`: the current minimal Python dependencies
 
-## What The Main Project Provides
+## Basic Model
 
-- `schemas/`: structural specifications for entities, evidence, proposals, and related records.
-- `scripts/`: the current build and validation tools used to produce and check a reference package.
-- `registry/`: the current reference entity package and release exports.
-- `evidence/` and `proposals/`: sample reference data linked to the entity layer.
-- `docs/`: definitions, governance, provider model, release data format, and consumption guidance.
+- providers publish AntiGEO-compatible packages
+- consumers load one or more provider packages
+- local user allowlists, local blocklists, and local overrides take priority over external provider data
 
-The registry data, sample evidence, sample proposals, and build outputs in this repository should be understood as a reference implementation / reference package rather than as a single official final record.
+The main repository does not aim to maintain one centralized global registry. Its focus is format clarity, compatibility, and a minimal consumable flow.
 
-## Core Required Layer And Optional Governance Extensions
+## Current Package Files
 
-The current core required layer mainly includes:
+The main file types currently exported under `registry/` include:
 
-- the entity schema
-- the override schema
-- the provider package / release-data format
-- `manifest`
-- `entities.compact`
-- topic / intent / risk / domain / name indexes
-- the consumer-side priority model
+- `full-index.json`
+- `entities.compact.json`
+- `manifest.json`
+- topic / intent / risk / domain / name index files
 
-The current optional governance-extension layer mainly includes:
+Together these files form the current minimal package shape for pre-search filtering and post-search matching.
 
-- evidence
-- proposals
-- governance
-- appeals
-- voting
-
-That means a provider can implement only the core data layer and still be consumable by the current consumer model. The repository continues to keep evidence / proposal schemas and samples, plus governance / appeals / voting documents, as optional governance extensions within the reference implementation.
-
-## Provider Model
-
-Within AntiGEO, a provider is a developer, team, or community-maintained data source that publishes packages in AntiGEO-compatible formats. Different providers may share the same schemas, index formats, and consumption model while maintaining their own record contents, review cadence, and governance practices.
-
-That means consumers are designed to work with any AntiGEO-compatible data source, not only with the main repository. The main repository can currently be treated as a reference provider / reference package, but it does not monopolize registry content.
-
-## User Control Priority
-
-AntiGEO is designed around interoperable formats and consumer control, not around taking final control away from the user. The current recommended priority model is:
-
-1. local user allowlist
-2. local user blocklist
-3. local user override
-4. external provider data
-
-Both the main project and third-party providers are input sources. The final decision about what to load, merge, trust, or override should remain with the consumer or end user.
-
-## Repository Contents
-
-```text
-AntiGEO/
-├── docs/        project documents, definitions, governance, provider model, release data
-├── schemas/     schemas for entities, evidence, proposals, and related records
-├── registry/    reference registry and release exports
-├── evidence/    reference evidence samples
-├── proposals/   reference proposal samples
-└── scripts/     build and validation tools
-```
-
-The current backbone already includes:
-
-- foundational schemas for entity / evidence / proposal
-- a reference entity registry plus compact, indexed, and release-style exports
-- a basic build / validate workflow
-- a minimal two-stage consumption model for pre-search filtering and post-search governance
-
-At the moment, evidence and proposal data are still primarily sample material for governance and review. The build / validate workflow is currently centered on the entity registry and release-data layer.
-
-## Where To Start
+## Quick Start
 
 - [Quick Start](./docs/quick-start.md)
-- [Release Data](./docs/release-data.md)
-- [Provider Model](./docs/provider-model.md)
-- [Definitions](./docs/definition.md)
-- [Governance](./docs/governance.md)
-- [Evidence Policy](./docs/evidence-policy.md)
-- [Voting](./docs/voting.md)
-- [Appeals](./docs/appeals.md)
-- [FAQ](./docs/faq.md)
-- [Contributing](./CONTRIBUTING.md)
 
-## Project Status
+## Current Status
 
-AntiGEO is still early-stage, but the main structural backbone is now in place. At this stage, the project should be read primarily as a specification layer, reference implementation, and reference package rather than as a single centralized registry service. Schemas, reference package structure, provider-model documentation, and consumption guidance may continue to evolve publicly over time.
+The project is still early-stage. At this stage, the repository mainly serves as a minimal specification core and reference implementation. It may continue to evolve, but the current priority is to keep the format clear, simple, and easy to consume.
 
-## License and Collaboration
+## License
 
-For licensing and contribution guidance, see [LICENSE](./LICENSE) and [CONTRIBUTING.md](./CONTRIBUTING.md). For the current relationship between release outputs and providers, start with [docs/release-data.md](./docs/release-data.md) and [docs/provider-model.md](./docs/provider-model.md).
+- [LICENSE](./LICENSE)
