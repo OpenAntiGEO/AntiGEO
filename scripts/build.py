@@ -22,6 +22,7 @@ TAG_TOPIC_INDEX_PATH = ROOT_DIR / "registry" / "tag-topic-to-entities.json"
 TAG_INTENT_INDEX_PATH = ROOT_DIR / "registry" / "tag-intent-to-entities.json"
 TAG_RISK_INDEX_PATH = ROOT_DIR / "registry" / "tag-risk-to-entities.json"
 DOMAIN_INDEX_PATH = ROOT_DIR / "registry" / "domain-to-entities.json"
+NAME_INDEX_PATH = ROOT_DIR / "registry" / "name-to-entities.json"
 
 VERSION = "0.1.0-dev"
 COMPACT_ENTITY_FIELDS = [
@@ -223,6 +224,27 @@ def build_domain_index(entities: list[Any]) -> dict[str, list[str]]:
     }
 
 
+def build_name_index(entities: list[Any]) -> dict[str, list[str]]:
+    index: dict[str, set[str]] = {}
+
+    for entity in entities:
+        if not isinstance(entity, dict):
+            continue
+
+        entity_id = str(entity.get("id", "")).strip()
+        if not entity_id:
+            continue
+
+        names = normalize_string_list([entity.get("name"), *entity.get("aliases", [])])
+        for name in names:
+            index.setdefault(name, set()).add(entity_id)
+
+    return {
+        name: sorted(entity_ids)
+        for name, entity_ids in sorted(index.items())
+    }
+
+
 def build_manifest(
     generated_at: str,
     counts_by_status: dict[str, int],
@@ -243,6 +265,7 @@ def build_manifest(
             "tag_intent_to_entities": "registry/tag-intent-to-entities.json",
             "tag_risk_to_entities": "registry/tag-risk-to-entities.json",
             "domain_to_entities": "registry/domain-to-entities.json",
+            "name_to_entities": "registry/name-to-entities.json",
         },
     }
 
@@ -298,6 +321,7 @@ def main() -> int:
     tag_intent_index = build_tag_index(merged_entities, "tags_intent")
     tag_risk_index = build_tag_index(merged_entities, "tags_risk")
     domain_index = build_domain_index(merged_entities)
+    name_index = build_name_index(merged_entities)
     manifest = build_manifest(
         generated_at=generated_at,
         counts_by_status=counts_by_status,
@@ -311,6 +335,7 @@ def main() -> int:
         write_json(TAG_INTENT_INDEX_PATH, tag_intent_index)
         write_json(TAG_RISK_INDEX_PATH, tag_risk_index)
         write_json(DOMAIN_INDEX_PATH, domain_index)
+        write_json(NAME_INDEX_PATH, name_index)
         write_json(MANIFEST_PATH, manifest)
     except OSError as exc:
         print(f"ERROR: Failed to write build output: {exc}")
@@ -322,6 +347,7 @@ def main() -> int:
     print(f"Wrote {TAG_INTENT_INDEX_PATH.relative_to(ROOT_DIR)}")
     print(f"Wrote {TAG_RISK_INDEX_PATH.relative_to(ROOT_DIR)}")
     print(f"Wrote {DOMAIN_INDEX_PATH.relative_to(ROOT_DIR)}")
+    print(f"Wrote {NAME_INDEX_PATH.relative_to(ROOT_DIR)}")
     print(f"Wrote {MANIFEST_PATH.relative_to(ROOT_DIR)}")
     print("Build completed successfully.")
     return 0
