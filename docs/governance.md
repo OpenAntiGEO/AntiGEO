@@ -8,13 +8,25 @@
 
 ### 1. 文档目的
 
-本文件用于定义 AntiGEO 的社区治理框架、提案流转方式与清单状态变更规则。它为提案、审核（review）、投票（voting）、申诉（appeals）与复审提供上层总规则，并说明社区如何以公开、可审计的方式处理 `watchlist`、`restricted` 与 `blocked`。
+本文件用于定义 AntiGEO 主项目的治理框架，以及主项目如何公开维护 schema、reference implementation、reference data 和相关文档。
 
-AntiGEO 的治理对象是清单状态，而不是对现实世界主体作终局裁定。
+本文件首先约束主项目自身仓库内容；外部 provider 可以参考这套框架，也可以在兼容 AntiGEO 数据格式的前提下采用自己的治理实践。
 
-### 2. 治理原则
+### 2. 主项目治理的对象
 
-AntiGEO 治理（governance）应遵循以下原则：
+当前主项目治理的对象主要包括：
+
+- schema 与数据结构约定
+- build / validate 工具链
+- reference registry
+- reference evidence / proposal 样例
+- release 数据格式与消费模型文档
+
+主项目不是所有 provider 的唯一治理中心。它治理的是自己的 reference implementation 和参考内容，而不是替所有 provider 统一裁决具体清单。
+
+### 3. 治理原则
+
+AntiGEO 主项目治理应遵循以下原则：
 
 - 证据优先
 - 可复核
@@ -24,107 +36,62 @@ AntiGEO 治理（governance）应遵循以下原则：
 - 可申诉与可复审
 - 尽量避免主观偏好、品牌立场或竞争性滥用
 
-在具体治理中，社区应持续关注**系统性**、**规模化**与**可复核**三个核心维度。对于证据不足、事实不清或争议较大的事项，不应作出过强结论。
+对于 reference data，社区应持续关注**系统性**、**规模化**与**可复核**三个核心维度。对于格式、工具与文档，则应优先关注清晰性、稳定性、可扩展性与兼容性。
 
-### 3. 可以发起什么类型的提案
+### 4. 可以治理哪些事项
 
-社区可以发起的提案类型至少包括：
+主项目治理至少可以处理以下事项：
 
-- 新增对象
-- 状态升级
-- 状态降级
-- 从清单中移除
-- 申诉 / 复审
-- 更正文档性错误或元数据错误
+- 修订 schema
+- 修订 release 数据格式
+- 修订 build / validate 行为
+- 更新 reference registry 样例
+- 更新 evidence / proposal 样例
+- 修订定义、治理、provider 模式与消费说明文档
+- 处理申诉、复审与文档性更正
 
-在当前早期阶段，任何社区参与者原则上均可发起提案；被记录对象或相关方也可以发起申诉或复审请求。
+### 5. 关于 reference data 的理解
 
-### 4. 提案的基本要求
+当前仓库中的 registry、sample evidence、sample proposals 与 build 导出文件，均应被视为参考样例或 reference package。它们可以帮助 provider 和 consumer 对齐格式与消费方式，但不构成唯一官方名单，也不要求外部 provider 与主项目内容完全一致。
 
-提案至少应包含以下内容：
+### 6. 基本流程
 
-- 对象信息
-- 提案类型
-- 支持证据
-- 对应理由
-- 建议状态
-- 必要的上下文说明
+主项目治理的基本流程通常包括：
 
-没有足够可复核证据的提案，不应进入正式投票。主观印象、品牌偏好、竞争立场或单一感受，本身不能构成充分依据。
+1. 提交问题、建议、提案或修订请求。
+2. 检查材料是否完整，以及是否属于主项目范围。
+3. 讨论其与定义、文档、schema 或 reference package 的一致性。
+4. 必要时进入更正式的审核或投票流程。
+5. 记录结果并公开保留必要历史。
 
-### 5. 基本流程
+若事项明显不属于主项目范围，例如要求主项目强制接管外部 provider 的所有清单内容，则可以直接说明边界并不纳入本仓库治理。
 
-AntiGEO 的基本治理流程如下：
+### 7. 关于状态与首次提案
 
-1. 提交提案。
-2. 对提案进行初步完整性检查。
-3. 由社区审核证据与定义匹配情况。
-4. 满足条件后进入投票。
-5. 根据投票结果决定状态。
-6. 记录结果并保留历史。
+当前 reference data 使用 `watchlist`、`restricted` 与 `blocked` 三种状态。对于新对象的首次提案，主项目不预设固定起始状态。首次提案可以直接建议进入其中任一状态；最终进入哪个状态，应由现有证据强度、可复核性与社区判断共同决定。
 
-初步完整性检查主要关注材料是否齐备、证据是否可复核、提案类型是否明确。若基础信息明显不足，提案可以在进入正式投票前被要求补充、暂缓或关闭。
+状态越高强度，审核就越应谨慎。首次提案并不当然只能先进入 `watchlist`，但若直接建议 `restricted` 或 `blocked`，则更需要足够强、可复核且与状态强度相匹配的证据基础。
 
-### 6. 状态变更规则
+### 8. 外部 provider 与主项目的关系
 
-`watchlist`、`restricted` 与 `blocked` 均不是永久状态。状态可以升级、降级或移除。
+外部 provider 可以：
 
-对于新对象的首次提案，AntiGEO 不预设固定起始状态。首次提案可以直接建议进入 `watchlist`、`restricted` 或 `blocked` 中的任一状态；最终进入哪个状态，应由现有证据强度、可复核性与社区判断共同决定，而不是由“首次出现”这一事实单独决定。
+- 直接参考主项目 schema 与 release 数据格式
+- 参考主项目 governance 文档中的原则
+- 选择维护自己的 evidence、proposal 与 registry 内容
+- 选择建立自己的审核、投票、申诉与发布流程
 
-对于更高强度的状态，社区应适用更谨慎的审核标准。换言之，首次提案并不当然只能先进入 `watchlist`，但若提案直接建议 `restricted` 或 `blocked`，则更需要有足够强、可复核且与状态强度相匹配的证据基础。
+主项目欢迎兼容性与格式层协作，但并不要求所有 provider 接受主项目作为唯一治理中心。
 
-状态变更通常应基于以下因素之一或其组合：
+### 9. 申诉、复审与修订
 
-- 新增证据
-- 既有证据失效或被推翻
-- 申诉成立
-- 事实修正
-- 社区复审结果
+主项目中的 reference data、reference 文档与 reference package 都可以被申诉、复审或公开修订。申诉与复审不自动导致状态变化或文档改写，但会为重新判断提供基础。
 
-AntiGEO 强调持续复审，而不是“一次加入、永久有效”。状态的存在仅表示在当前记录下，社区认为对应风险级别具有一定依据。
-
-### 7. 申诉与复审
-
-被记录对象或社区成员可以发起申诉或复审。申诉不自动导致状态移除或降级，仍需经过审核。
-
-申诉或复审通常应提供以下一种或多种内容：
-
-- 补充材料
-- 事实更正
-- 反证
-- 对既有证据的有效性质疑
-
-复审完成后，相关状态可以被维持、降级、升级或移除。所有结果都应尽量以公开、可审计的方式记录。
-
-### 8. 不当使用与治理保护
-
-AntiGEO 需要防止以下不当使用情形：
-
-- 恶意提交
-- 竞争对手滥用
-- 伪造或不可验证证据
-- 只凭个人偏好要求列入
-- 重复、骚扰式提案
-
-对于上述情况，社区可以拒绝、关闭、驳回或要求补充相关提案。治理流程的目的在于识别和记录可复核的系统性风险，而不是为品牌攻击、竞争性操作或情绪化判断提供渠道。
-
-### 9. 与其它文档的关系
-
-各文档分工如下：
-
-- `definition.md`：定义范围与边界
-- `evidence-policy.md`：定义证据规范
-- `voting.md`：定义投票细则
-- `appeals.md`：定义申诉流程细节
-- `governance.md`：提供上层总框架
-
-当具体规则出现交叉时，应以本文件为治理总框架，并结合对应专题文档共同理解。
+当事实更正、新证据、格式问题或更好的文档表达出现时，主项目应允许通过公开流程修订 reference implementation。
 
 ### 10. 早期项目说明
 
-AntiGEO 仍处于早期阶段，治理流程、提案形式与审核细节可能随着社区实践经验而逐步修订。此类修订应尽量通过公开方式进行，并继续遵循透明、可审计与谨慎认定原则。
-
-本治理文档未来可通过社区公开修订。
+AntiGEO 仍处于早期阶段。当前 governance 首先服务于主项目自身的规范层与参考实现建设，而不是试图成为所有 provider 的统一裁决中心。随着实践推进，治理细节仍可能继续公开收敛与调整。
 
 ---
 
@@ -132,121 +99,87 @@ AntiGEO 仍处于早期阶段，治理流程、提案形式与审核细节可能
 
 ### 1. Purpose of This Document
 
-This document defines the AntiGEO governance framework, the way proposals move through the project, and the rules for status changes in the registry. It provides the top-level rules for proposals, review, voting, appeals, and re-review, and explains how the community handles `watchlist`, `restricted`, and `blocked` through a transparent and auditable process.
+This document defines the governance framework for the AntiGEO main project and explains how the main repository publicly maintains its schemas, reference implementation, reference data, and related documentation.
 
-The object of AntiGEO governance is the risk status recorded in the registry, not a final determination about a real-world entity.
+This document primarily governs the main repository itself. External providers may follow this framework, but they may also adopt their own governance practices as long as they remain compatible with AntiGEO data conventions.
 
-### 2. Governance Principles
+### 2. What The Main Project Governs
 
-AntiGEO governance should follow these principles:
+The current governance scope of the main project mainly includes:
 
-- Evidence first
-- Evidence-based review
-- Verifiability
-- Cautious determination
-- Transparent and auditable process
-- Consistency
-- Appeals and re-review
-- Avoid subjective preference, brand alignment, or competitive abuse wherever possible
+- schemas and structural conventions
+- the build / validate toolchain
+- the reference registry
+- reference evidence / proposal samples
+- release-data formats and consumer guidance
 
-In practice, the community should continue to focus on three core dimensions: **systemic pattern**, **scale**, and **verifiability**. Where evidence is weak, facts are unclear, or disputes remain substantial, the project should avoid strong conclusions.
+The main project is not the sole governance center for every provider. It governs its own reference implementation and sample contents rather than issuing centralized decisions for all registries everywhere.
 
-### 3. What Types of Proposals May Be Submitted
+### 3. Governance Principles
 
-Proposal types should include at least the following:
+Governance of the AntiGEO main project should follow these principles:
 
-- Add a new entity
-- Upgrade a status
-- Downgrade a status
-- Remove an entity from the registry
-- Appeals / re-review
-- Correct documentary errors or metadata errors
+- evidence first
+- verifiability
+- cautious determination
+- transparency and auditability
+- consistency
+- appeals and re-review
+- avoid subjective preference, brand alignment, or competitive abuse wherever possible
 
-At this early stage, any community participant may in principle submit a proposal. A recorded entity, or a related party, may also initiate appeals or a request for re-review.
+For reference data, the community should continue to focus on **systemic pattern**, **scale**, and **verifiability**. For formats, tools, and documentation, the focus should be on clarity, stability, extensibility, and compatibility.
 
-### 4. Basic Requirements for a Proposal
+### 4. What May Be Governed
 
-A proposal should include at least:
+The main project may govern at least the following:
 
-- Entity information
-- Proposal type
-- Supporting evidence
-- Rationale
-- Proposed status
-- Necessary contextual explanation
+- schema revisions
+- release-data format revisions
+- build / validate behavior
+- updates to the reference registry
+- updates to reference evidence / proposal samples
+- revisions to definitions, governance, provider-model, and consumer guidance documents
+- appeals, re-review, and documentary corrections
 
-Any proposal without sufficient verifiable evidence should not proceed to formal voting. Subjective impressions, brand preference, competitive interest, or a single personal view are not sufficient on their own.
+### 5. How To Understand Reference Data
 
-### 5. Basic Process
+The registry data, sample evidence, sample proposals, and build outputs in this repository should all be understood as sample material or a reference package. They help providers and consumers align on format and usage, but they do not create a single official registry and do not require all external providers to match the main repository exactly.
 
-The basic AntiGEO process is as follows:
+### 6. Basic Process
 
-1. Submit a proposal.
-2. Conduct a preliminary review for completeness.
-3. Review the evidence and its fit with the project definitions.
-4. Move to voting once the proposal meets the required conditions.
-5. Determine the status based on the voting result.
-6. Record the outcome and preserve the history.
+The basic governance process for the main project usually includes:
 
-The preliminary review is mainly concerned with whether the materials are complete, whether the evidence is verifiable, and whether the proposal type is clear. If the basic record is plainly insufficient, the proposal may be returned for completion, deferred, or closed before formal voting.
+1. Submit an issue, proposal, change request, or revision.
+2. Check whether the material is complete and within the scope of the main project.
+3. Discuss its consistency with the definitions, documentation, schemas, or reference package.
+4. Move to more formal review or voting when needed.
+5. Record the outcome and preserve the necessary public history.
 
-### 6. Rules for Status Changes
+If a request is plainly outside the scope of the main project, such as asking the main repository to take over all third-party registry content, the project may simply clarify the boundary and decline to govern it here.
 
-`watchlist`, `restricted`, and `blocked` are not permanent states. A status may be upgraded, downgraded, or removed.
+### 7. Statuses and Initial Proposals
 
-For a first proposal involving a new entity, AntiGEO does not assume a fixed entry status. An initial proposal may directly recommend `watchlist`, `restricted`, or `blocked`; the appropriate status should be determined by the strength of the available evidence, its verifiability, and the community's judgment, rather than by the fact that the entity is being proposed for the first time.
+The current reference data uses `watchlist`, `restricted`, and `blocked`. For a first proposal involving a new entity, the main project does not assume a fixed entry status. An initial proposal may recommend any of those statuses, and the appropriate outcome should be determined by the available evidence, its verifiability, and community judgment.
 
-Higher-severity statuses should be reviewed with greater caution. In other words, an initial proposal is not required to begin at `watchlist`, but a proposal that directly seeks `restricted` or `blocked` should rest on evidence that is sufficiently strong, verifiable, and proportionate to the severity of the proposed status.
+The more severe the proposed status, the more cautious the review should be. An initial proposal is therefore not required to begin at `watchlist`, but a proposal that directly seeks `restricted` or `blocked` should rest on evidence that is strong enough, verifiable enough, and proportionate to the severity of the status.
 
-Status changes should generally be based on one or more of the following:
+### 8. Relationship Between External Providers and The Main Project
 
-- New evidence
-- Previously relied-on evidence becoming invalid or being rebutted
-- A successful appeal
-- Correction of facts
-- A community re-review outcome
+External providers may:
 
-AntiGEO emphasizes continuing re-review rather than permanent inclusion. A status means only that, based on the current record, the community considers there to be sufficient basis for that level of risk.
+- adopt the project's schemas and release-data formats directly
+- use the project's governance documents as guidance
+- maintain their own evidence, proposal, and registry contents
+- define their own review, voting, appeal, and publication processes
 
-### 7. Appeals and Re-Review
+The main project welcomes compatibility and format-level collaboration, but it does not require every provider to accept the main repository as the single governance authority.
 
-A recorded entity or any community participant may initiate appeals or re-review. An appeal does not automatically lead to removal or downgrade; it still requires review.
+### 9. Appeals, Re-Review, and Revisions
 
-An appeal or re-review should normally provide one or more of the following:
+Reference data, reference documentation, and the reference package in the main project may all be appealed, re-reviewed, or revised publicly. Appeals and re-review do not automatically change a status or rewrite a document, but they create a basis for reassessment.
 
-- Additional materials
-- Factual corrections
-- Counter-evidence
-- Challenges to the validity of existing evidence
-
-After re-review, the relevant status may be maintained, downgraded, upgraded, or removed. Outcomes should be recorded openly and in an auditable manner to the extent practical.
-
-### 8. Abuse Prevention and Governance Safeguards
-
-AntiGEO should guard against the following:
-
-- Abusive submissions
-- Misuse by competitors
-- Fabricated or unverifiable evidence
-- Requests for listing based only on personal preference
-- Repetitive or harassing proposals
-
-The community may refuse, close, reject, or require supplementation for such proposals. The purpose of the governance process is to identify and record verifiable systemic risk, not to provide a channel for brand attacks, competitive maneuvering, or emotional judgments.
-
-### 9. Relationship to Other Documents
-
-The documents are divided as follows:
-
-- `definition.md`: scope and boundaries
-- `evidence-policy.md`: evidence standards
-- `voting.md`: voting details
-- `appeals.md`: appeals process details
-- `governance.md`: top-level framework
-
-Where specific rules overlap, this document serves as the top-level governance framework and should be read together with the relevant topic-specific document.
+Where factual corrections, new evidence, format issues, or better documentation become available, the project should allow the reference implementation to be revised through a public process.
 
 ### 10. Early-Stage Project Note
 
-AntiGEO is still at an early stage, and its governance process, proposal format, and review details may evolve as the community gains practical experience. Such revisions should be made as openly as possible and should continue to follow the principles of transparency, auditability, and cautious determination.
-
-These governance rules may be revised in the future through an open community process.
+AntiGEO is still early-stage. Its current governance is primarily intended to support the project's specification layer and reference implementation rather than to serve as a universal decision center for every provider. As practice evolves, governance details may continue to be refined publicly.

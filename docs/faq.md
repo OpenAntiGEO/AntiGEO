@@ -8,63 +8,66 @@
 
 ### 1. AntiGEO 是什么？
 
-AntiGEO 是一个开源、可审计、社区治理的 GEO 操纵风险清单，用于记录可能存在系统性操纵风险的对象及其证据基础。
+AntiGEO 是一个开源、可审计、社区治理的 GEO 风险清单规范与参考实现项目。它提供 schema、索引格式、build / validate 工具、参考样例数据，以及 consumer 如何消费这些数据的最小模型。
 
-### 2. AntiGEO 不是什么？
+### 2. AntiGEO 是否维护唯一名单？
 
-AntiGEO 不是品牌攻击工具，不是产品优劣排行榜，不是单篇内容真假裁定器，也不是法律或监管结论的替代品。
+不是。AntiGEO 主项目当前不追求维护唯一、中心化、全局权威的名单。具体风险清单可以由不同 provider 独立发布，只要它们遵守兼容的数据格式和消费约定。
 
-### 3. 为什么需要 AntiGEO？
+### 3. 为什么允许多个 provider？
 
-AI 搜索、摘要和答案系统可能受到系统性操纵影响。AntiGEO 提供一个公开、可审计、可复核的风险登记层，让下游工具可以自主决定如何消费这份清单。
+因为 GEO 风险判断本身可能依赖不同的数据来源、审核节奏、治理偏好和部署场景。允许多个 provider，可以让 consumer 与用户自行选择更适合自己的数据源，而不强制绑定单一中心仓库。
 
-### 4. AntiGEO 如何工作？
+### 4. 主项目中的数据是不是官方最终裁决？
 
-AntiGEO 采用三段式流程：先提交可复核证据，再由社区审核，最后在满足条件时进入投票并决定状态。
+不是。当前仓库中的 registry、sample evidence、sample proposals 和 release 导出，都应理解为 reference implementation / reference package 的一部分。它们用于说明格式、工具链和消费模型，不应被理解为唯一官方最终裁决。
 
-### 5. watchlist / restricted / blocked 有什么区别？
+### 5. provider 和 consumer 分别是什么？
 
-`watchlist` 表示已有一定证据，需要继续观察；`restricted` 表示证据较充分，存在较明显的系统性操纵风险；`blocked` 表示证据强且相对明确，属于高风险 GEO 操纵源。
+provider 是按 AntiGEO 规范发布数据包的开发者、团队或社区维护数据源。consumer 是加载这些数据包并在搜索、检索、代理、RAG 或其它系统中使用它们的工具、插件或服务。
 
-### 6. 被列入清单是否等于被“定罪”？
+### 6. 用户为什么要自己选择信任源？
 
-不等于。AntiGEO 记录的是风险状态及其证据基础，不是终局定罪，也不替代法律或监管结论。
+因为不同 provider 可能维护不同覆盖范围、不同审查标准和不同更新频率。把选择权留给用户或 consumer，可以减少单点判断的风险，也更符合 AntiGEO 当前作为规范层和 reference implementation 的定位。
 
-### 7. AntiGEO 是不是在反对一切 SEO、广告或 PR？
+### 7. 为什么用户本地规则优先？
 
-不是。正常 SEO、官网内容、合法 PR 和明确标注的广告，并不自动属于 AntiGEO 的关注范围。项目关注的是系统性、规模化、可复核的操纵风险。
+因为最终控制权应保留给用户或 consumer，而不是被外部 provider 或主项目直接夺走。当前建议的优先级是：用户本地白名单、用户本地 blocklist、用户本地 override，高于外部 provider 数据。
 
-### 8. 单张截图、主观体验、二手整理材料能直接决定状态吗？
+### 8. 如果我只想用 AntiGEO 主项目的数据，可以吗？
 
-通常不能。这类材料通常只能作为辅助信息，单份辅助材料一般不能自动决定最终状态。
+可以。当前主项目可以被视为一个 reference provider / reference package。你可以只使用主项目导出的 release 数据，也可以同时订阅其它 provider，再由本地规则决定最终覆盖关系。
 
-### 9. 为什么需要申诉与复审？
+### 9. provider 是否必须把自己的清单提交到主项目？
 
-因为状态不是永久的。新证据、反证、事实更正和补充上下文都可能改变判断，公开治理也需要允许纠错。
+不必须。开发者、团队或社区完全可以基于 AntiGEO 的 schema、索引格式和消费模型维护独立 provider 仓库或独立数据源。主项目欢迎规范、工具、样例和文档贡献，但不要求所有清单内容都汇总到主项目。
 
-### 10. 为什么主项目不直接做插件或 SDK 等接入层项目？
+### 10. 当前 release 数据是用来做什么的？
 
-主项目聚焦标准、清单、证据与治理。插件和 SDK 属于消费层，应独立演进，这样边界更清楚，也更利于第三方接入。
+当前 release 数据主要用于支持两个阶段：
 
-### 11. 谁可以参与贡献？
+- 搜索前初筛：通过 topic / intent 索引缩小候选 entity 范围
+- 搜索后治理：通过 domain / name 索引命中 entity，再结合 compact entity 的状态与风险字段做处理
 
-社区贡献是欢迎的，但提交仍需符合项目规则、证据要求和协作原则。文档改进、术语统一和结构优化同样是有效贡献。
+### 11. evidence 和 proposal 目前处于什么状态？
 
-### 12. 如果我不同意某个状态怎么办？
+当前主项目已经提供 evidence / proposal 的 schema 与参考样例数据，但它们目前更多处于治理与审查层样例状态。当前 build / validate 主链路仍主要围绕 entity registry 与 release 数据层。
 
-你可以发起申诉或复审，并提供新证据、反证或事实更正。新的申诉或复审不会自动推翻既有结果，但会为重新判断提供基础。
+### 12. AntiGEO 是否会替代法律、监管或平台结论？
+
+不会。AntiGEO 记录的是风险状态、数据结构与治理模型，不是法律、监管或平台执法结论的替代品。
 
 进一步阅读：
 
 - [README.md](../README.md)
+- [docs/quick-start.md](./quick-start.md)
+- [docs/release-data.md](./release-data.md)
+- [docs/provider-model.md](./provider-model.md)
 - [docs/definition.md](./definition.md)
 - [docs/governance.md](./governance.md)
-- [docs/evidence-policy.md](./evidence-policy.md)
-- [docs/voting.md](./voting.md)
-- [docs/appeals.md](./appeals.md)
 - [CONTRIBUTING.md](../CONTRIBUTING.md)
 
-本 FAQ 会随着项目发展通过公开方式持续更新。
+本 FAQ 会随着项目结构和 provider 模式的演进继续公开更新。
 
 ---
 
@@ -72,60 +75,63 @@ AntiGEO 采用三段式流程：先提交可复核证据，再由社区审核，
 
 ### 1. What is AntiGEO?
 
-AntiGEO is an open, auditable, community-governed GEO manipulation risk registry that records objects that may present systemic manipulation risk and the evidentiary basis for that risk.
+AntiGEO is an open, auditable, community-governed GEO risk registry specification and reference implementation project. It provides schemas, index formats, build / validate tooling, sample reference data, and a minimal consumption model for downstream consumers.
 
-### 2. What is AntiGEO not?
+### 2. Does AntiGEO maintain a single authoritative registry?
 
-AntiGEO is not a tool for brand attacks, not a ranking of product quality, not a truth arbiter for single pieces of content, and not a substitute for legal or regulatory conclusions.
+No. The main project does not currently aim to maintain a single centralized or globally authoritative registry. Concrete risk registries may be published independently by different providers as long as they follow compatible data formats and consumption conventions.
 
-### 3. Why is AntiGEO needed?
+### 3. Why allow multiple providers?
 
-AI search, summaries, and answer systems may be affected by systemic manipulation. AntiGEO provides an open, auditable, and verifiable risk registry layer so that downstream tools can choose how to consume the registry.
+Because GEO risk assessment may depend on different data sources, review cadence, governance preferences, and deployment contexts. Allowing multiple providers lets consumers and users choose the sources that fit their needs rather than forcing everything through one central repository.
 
-### 4. How does AntiGEO work?
+### 4. Is the data in the main project an official final ruling?
 
-AntiGEO follows a three-step process: submit verifiable evidence, conduct community review, and then move to voting when the conditions are met to determine status.
+No. The current registry data, sample evidence, sample proposals, and release exports in this repository should be understood as part of a reference implementation / reference package. They illustrate format, tooling, and consumption behavior rather than serving as a single official final ruling.
 
-### 5. What is the difference between watchlist, restricted, and blocked?
+### 5. What are providers and consumers?
 
-`watchlist` means there is some evidence and the subject should continue to be observed. `restricted` means the evidence is relatively substantial and indicates a clearer systemic manipulation risk. `blocked` means the evidence is strong and comparatively clear, indicating a high-risk GEO manipulation source.
+A provider is a developer, team, or community-maintained data source that publishes AntiGEO-compatible packages. A consumer is any tool, plugin, service, or local system that loads those packages and uses them in search, retrieval, proxying, RAG, or similar workflows.
 
-### 6. Does inclusion in the registry mean someone has been "convicted"?
+### 6. Why should users choose which sources to trust?
 
-No. AntiGEO records a risk status and its evidentiary basis. It is not a conviction or final determination, and it does not replace legal or regulatory conclusions.
+Because different providers may maintain different coverage, review standards, and update cadence. Leaving that choice with the user or consumer reduces single-source risk and is more consistent with AntiGEO's current role as a specification layer and reference implementation.
 
-### 7. Is AntiGEO opposed to all SEO, advertising, or PR?
+### 7. Why do local rules take priority?
 
-No. Ordinary SEO, official website content, legitimate PR, and clearly disclosed advertising are not automatically within AntiGEO's scope. The project is concerned with systemic, scalable, and verifiable manipulation risk.
+Because final control should remain with the user or consumer rather than being imposed directly by a provider or by the main project. The current recommended priority is: local allowlist, local blocklist, local override, then external provider data.
 
-### 8. Can a single screenshot, subjective experience, or secondary compilation determine status directly?
+### 8. Can I use only the main project's data?
 
-Usually not. Supporting materials usually cannot determine status on their own, and a single supporting material should not automatically set the final status.
+Yes. The main repository can be treated as a reference provider / reference package. You may use only the main project's release outputs, or combine them with third-party providers and let local rules determine the final override behavior.
 
-### 9. Why are appeals and re-review necessary?
+### 9. Must providers submit their registries back to the main project?
 
-Because statuses are not permanent. New evidence, counter-evidence, factual corrections, and added context may change the assessment, and open governance needs a way to correct the record.
+No. Developers, teams, and communities can maintain independent provider repositories or data sources using AntiGEO schemas, index formats, and consumption conventions. The main project welcomes contributions to standards, tooling, documentation, and sample data, but it does not require all registry content to be centralized here.
 
-### 10. Why does the main project not directly build plugins or SDKs?
+### 10. What is the current release data for?
 
-The main project is focused on standards, the registry, evidence, and governance. Plugins and SDKs belong to the consumption layer and should evolve independently. That keeps boundaries clearer and makes third-party integration easier.
+The current release data mainly supports two stages:
 
-### 11. Who can contribute?
+- pre-search filtering, using topic / intent indexes to narrow candidate entities
+- post-search governance, using domain / name indexes to match entities and then applying status and risk fields from compact entities
 
-Community contributions are welcome, but submissions should still follow the project rules, evidence requirements, and collaboration principles. Documentation, terminology, and structural improvements are also valid contributions.
+### 11. What is the current role of evidence and proposal data?
 
-### 12. What if I disagree with a status?
+The main project already provides schemas and sample data for evidence and proposals, but they are still primarily sample material for governance and review. The current build / validate workflow is still centered on the entity registry and release-data layer.
 
-You can initiate appeals or re-review and provide new evidence, counter-evidence, or factual corrections. A new appeal or re-review does not automatically overturn the existing result, but it can provide grounds for reassessment.
+### 12. Does AntiGEO replace legal, regulatory, or platform conclusions?
+
+No. AntiGEO records risk status, data structures, and governance models. It is not a substitute for legal, regulatory, or platform enforcement conclusions.
 
 Further reading:
 
 - [README.md](../README.md)
+- [docs/quick-start.md](./quick-start.md)
+- [docs/release-data.md](./release-data.md)
+- [docs/provider-model.md](./provider-model.md)
 - [docs/definition.md](./definition.md)
 - [docs/governance.md](./governance.md)
-- [docs/evidence-policy.md](./evidence-policy.md)
-- [docs/voting.md](./voting.md)
-- [docs/appeals.md](./appeals.md)
 - [CONTRIBUTING.md](../CONTRIBUTING.md)
 
-This FAQ may be updated publicly as the project evolves.
+This FAQ will continue to evolve publicly as the project structure and provider model mature.

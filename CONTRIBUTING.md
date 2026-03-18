@@ -6,187 +6,188 @@
 
 ## 中文
 
-### 1. 欢迎与目标
+### 1. 欢迎与定位
 
-欢迎参与 AntiGEO。社区贡献的目标，是帮助项目保持公开、透明、可审计、可复核，并持续改进清单、文档与治理记录的准确性。
+欢迎参与 AntiGEO。当前主项目首先是一个规范层、reference implementation 与 reference package 项目，因此最重要的贡献方向包括 schema、文档、工具链、参考样例数据，以及 consumer 如何使用这些数据的说明。
 
-AntiGEO 欢迎贡献，但不接受一切提交。贡献应以证据、上下文和可复核性为中心。
+主项目欢迎贡献，但不要求所有清单都提交到本仓库。若你希望长期维护自己的清单来源，也完全可以基于 AntiGEO 规范建立独立 provider 仓库或独立数据源。
 
-### 2. 可以如何贡献
+### 2. 当前最需要的贡献
 
-你可以通过以下方式参与：
+当前主项目尤其欢迎以下类型的贡献：
 
-- 提交新提案
-- 补充或修正证据
-- 发起状态升级、降级或移除建议
-- 发起申诉或复审请求
-- 修正文档、术语、元数据或结构性问题
-- 改进文档表达与项目说明
+- 修订和完善 schema
+- 改进 build / validate 脚本
+- 改进 release 数据格式与索引说明
+- 补充或修正 reference entity / evidence / proposal 样例
+- 改进定义、治理、provider 模式与 FAQ 文档
+- 提高术语一致性、可读性和项目边界清晰度
 
-### 3. 提交前应先阅读哪些文档
+### 3. 如果你想维护自己的 provider
 
-提交前，建议先阅读以下核心文档：
+如果你的目标是维护一份独立风险清单来源，推荐做法通常是：
+
+- 参考 AntiGEO 的 schema 与 release 数据格式
+- 参考当前 reference package 的构建与校验方式
+- 在自己的仓库或数据源中维护具体 registry 内容
+- 自行决定 provider 的审核、更新与发布节奏
+
+换言之，AntiGEO 主项目更像公共规范与参考实现，而不是所有清单内容的唯一汇总点。
+
+### 4. 提交前建议阅读
+
+提交前建议先阅读：
 
 - [README.md](./README.md)
 - [docs/definition.md](./docs/definition.md)
+- [docs/release-data.md](./docs/release-data.md)
+- [docs/provider-model.md](./docs/provider-model.md)
 - [docs/governance.md](./docs/governance.md)
 - [docs/evidence-policy.md](./docs/evidence-policy.md)
-- [docs/voting.md](./docs/voting.md)
-- [docs/appeals.md](./docs/appeals.md)
 
-### 4. 提交内容的基本要求
+### 5. 提交内容的基本要求
 
 提交内容应尽量满足以下要求：
 
-- 内容尽量完整、清楚、可复核
-- 相关主张尽量附证据或必要上下文
-- 引用公开材料时尽量保留来源链接与获取时间
-- 不要只提交结论，尽量说明理由
-- 术语和状态使用应与项目文档一致
+- 内容清楚、范围明确、可复核
+- 术语使用与项目文档保持一致
+- 不要只提交结论，尽量说明理由与上下文
+- 修改 schema、工具或 release 格式时，应尽量考虑兼容性和 consumer 影响
+- 提交 reference data 时，应明确其为样例、参考记录或主项目参考内容，而不是要求其自动成为全局唯一名单
 
-对于提案、证据或状态建议，主观印象本身不能构成充分依据。
+### 6. 不鼓励或可能被拒绝的提交
 
-### 5. 不鼓励或不接受的提交方式
-
-以下提交方式不鼓励，或可能被拒绝：
+以下内容不鼓励，或可能被拒绝：
 
 - 无证据的指控
 - 仅基于品牌偏好或主观印象的要求
+- 试图把主项目强行变成所有 provider 的唯一中心名单
 - 重复提交且无新增内容
 - 骚扰、攻击性或竞争性滥用
 - 明显脱离项目范围的内容
-- 无法复核来源且没有必要上下文的材料
 
-AntiGEO 不欢迎把清单当作品牌攻击工具或舆论工具。
+### 7. 文档、工具与样例同样重要
 
-### 6. 协作原则
+在当前阶段，以下贡献同样非常重要：
 
-社区协作应尽量遵循以下原则：
-
-- 保持克制
-- 以证据为中心
-- 尊重复审与申诉机制
-- 接受状态可能被修订
-- 避免把项目当作舆论工具或品牌攻击工具
-- 尽量帮助文档更清楚、记录更准确
-
-### 7. 关于提案与证据的特别提醒
-
-请注意以下事项：
-
-- 新提案不等于自动进入投票
-- 证据不足的内容可能被要求补充
-- 辅助性材料通常不能单独支持高强度状态
-- 更高强度状态需要更强证据
-- 社区可能会拒绝明显不适当的提交
-
-### 8. 关于文档与结构贡献
-
-即使不参与具体提案，也欢迎以下贡献：
-
-- 术语统一
 - 文档澄清
-- 拼写或格式修正
-- 结构整理
-- 提高可读性与一致性
+- 术语统一
+- release 数据说明优化
+- provider 模式说明补充
+- 样例数据可读性提升
+- build / validate 行为收敛
 
-文档与结构优化同样是有效贡献。
+这些工作直接影响 provider 与 consumer 是否能够稳定对齐。
 
-### 9. 早期项目说明
+### 8. 关于参考数据的提醒
 
-AntiGEO 仍处于早期阶段，贡献方式与提交流程未来可能通过公开方式逐步完善。相关调整仍应保持透明、克制和可审计。
+当前仓库中的 registry、sample evidence、sample proposals 与 release 导出，都应被理解为 reference data / reference package。它们可以被修订、替换、补充和审查，但不应被理解为所有外部数据源都必须提交到本仓库统一维护。
+
+### 9. 协作方式
+
+协作时请尽量保持：
+
+- 克制
+- 透明
+- 以证据和上下文为中心
+- 尊重项目边界
+- 尊重用户与 consumer 的本地控制优先级
+
+### 10. 早期项目说明
+
+AntiGEO 仍处于早期阶段，贡献方式与目录边界仍可能继续公开收敛。若你不确定某项内容应该进入主项目还是独立 provider，更推荐先把问题表述清楚，再围绕“规范层还是数据源本身”这个边界来决定落点。
 
 ---
 
 ## English
 
-### 1. Welcome and Goal
+### 1. Welcome and Positioning
 
-Contributions to AntiGEO are welcome. The goal of community contribution is to help keep the project open, transparent, auditable, and verifiable, while improving the accuracy of the registry, documentation, and governance record.
+Contributions to AntiGEO are welcome. The main repository is currently best understood as a specification layer, reference implementation, and reference package project. That means the most important contribution areas include schemas, documentation, tooling, sample data, and guidance for how consumers should use those outputs.
 
-AntiGEO welcomes contributions, but it does not accept every submission. Contributions should be centered on evidence, context, and verifiability.
+The main project welcomes contributions, but it does not require all registry content to be submitted here. If you want to maintain your own long-lived registry source, you can build an independent provider repository or data source on top of AntiGEO conventions.
 
-### 2. Ways to Contribute
+### 2. What Contributions Are Most Useful Right Now
 
-You can contribute in the following ways:
+The main project is especially interested in:
 
-- Submit a new proposal
-- Add or correct evidence
-- Propose a status upgrade, downgrade, or removal
-- Initiate an appeal or re-review request
-- Correct documentation, terminology, metadata, or structural issues
-- Improve documentation wording and project explanations
+- refining and extending schemas
+- improving build / validate scripts
+- improving release-data formats and index guidance
+- adding or correcting reference entity / evidence / proposal samples
+- improving definitions, governance, provider-model, and FAQ documentation
+- making terminology, readability, and project boundaries clearer
 
-### 3. Review the Core Documents First
+### 3. If You Want To Maintain Your Own Provider
 
-Before contributing, contributors should review these core documents first:
+If your goal is to maintain an independent risk-registry source, the usual approach is:
+
+- follow AntiGEO schemas and release-data formats
+- use the current reference package as a tooling and structure reference
+- maintain your concrete registry content in your own repository or data source
+- define your own review, update, and publication cadence
+
+In other words, the main AntiGEO repository is better treated as a public specification and reference implementation than as the single required home for all registry content.
+
+### 4. Recommended Reading Before Contributing
+
+Please review the following before contributing:
 
 - [README.md](./README.md)
 - [docs/definition.md](./docs/definition.md)
+- [docs/release-data.md](./docs/release-data.md)
+- [docs/provider-model.md](./docs/provider-model.md)
 - [docs/governance.md](./docs/governance.md)
 - [docs/evidence-policy.md](./docs/evidence-policy.md)
-- [docs/voting.md](./docs/voting.md)
-- [docs/appeals.md](./docs/appeals.md)
 
-### 4. Basic Requirements for Submissions
+### 5. Basic Expectations For Submissions
 
-Submissions should be complete, clear, and verifiable as far as possible:
+Submissions should be:
 
-- Relevant claims should include evidence or necessary context where possible
-- Public materials should retain source links and access time where possible
-- Do not submit conclusions alone; include supporting reasoning
-- Terminology and status usage should remain consistent with the project documents
+- clear in scope and verifiable where applicable
+- consistent with project terminology
+- supported by rationale and context rather than conclusions alone
+- mindful of compatibility and consumer impact when changing schemas, tooling, or release formats
+- explicit that reference data in the main repository is sample or reference material rather than an automatic global registry decision
 
-For proposals, evidence, or status suggestions, subjective impressions are not sufficient on their own.
-
-### 5. Disfavored or Unacceptable Submissions
+### 6. Disfavored or Potentially Rejected Contributions
 
 The following are disfavored or may be rejected:
 
-- Accusations without evidence
-- Requests based only on brand preference or subjective impression
-- Repetitive submissions without new content
-- Harassing, aggressive, or competitively abusive submissions
-- Content clearly outside project scope
-- Materials with unverifiable sourcing and no necessary context
+- accusations without evidence
+- requests based only on brand preference or subjective impression
+- attempts to force the main project into becoming the single central registry for every provider
+- repetitive submissions without meaningful new content
+- harassing, aggressive, or competitively abusive behavior
+- content clearly outside project scope
 
-AntiGEO does not welcome attempts to use the registry as a tool for brand attacks or public-opinion campaigns.
+### 7. Documentation, Tooling, and Samples Matter
 
-### 6. Collaboration Principles
+At the current stage, the following are also high-value contributions:
 
-Community collaboration should remain guided by the following:
+- documentation clarification
+- terminology consistency
+- better release-data guidance
+- clearer provider-model explanations
+- more readable sample data
+- tighter build / validate behavior
 
-- Stay restrained
-- Keep the work evidence centered
-- Respect appeals and re-review mechanisms
-- Accept that status changes may be revised
-- Do not use the project as a tool for narrative or brand attacks
-- Help make the documentation clearer and the record more accurate
+These directly affect whether providers and consumers can align reliably.
 
-### 7. Special Notes on Proposals and Evidence
+### 8. A Note on Reference Data
 
-Please keep the following in mind:
+The registry data, sample evidence, sample proposals, and release outputs in this repository should all be treated as reference data / a reference package. They may be revised, replaced, expanded, and reviewed, but they should not be read as requiring every external data source to be maintained in this one repository.
 
-- A new proposal does not automatically proceed to voting
-- Submissions with insufficient evidence may be returned for supplementation
-- Supporting materials usually cannot justify a high-severity status on their own
-- Higher-severity statuses require stronger evidence
-- Clearly inappropriate submissions may be declined
+### 9. Collaboration Style
 
-### 8. Documentation and Structural Contributions
+Please aim to keep collaboration:
 
-Even if you are not submitting a proposal, the following contributions are welcome:
+- restrained
+- transparent
+- evidence and context centered
+- respectful of project boundaries
+- respectful of user and consumer local-priority control
 
-- Terminology consistency
-- Documentation clarification
-- Spelling or formatting fixes
-- Structural cleanup
-- Improvements to readability and consistency
+### 10. Early-Stage Project Note
 
-Documentation and structural contributions are valid contributions.
-
-### 9. Early-Stage Project Note
-
-AntiGEO is still at an early stage, and contribution patterns and submission processes may be refined publicly over time. Any such changes should remain transparent, restrained, and auditable.
-
-This contribution guide may be revised in the future through an open community process.
+AntiGEO is still early-stage, and contribution patterns and repository boundaries may continue to evolve publicly. If you are unsure whether something belongs in the main project or in an independent provider, it is usually best to frame the question first and decide based on whether the contribution belongs to the specification layer or to a concrete data source.

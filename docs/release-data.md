@@ -8,109 +8,114 @@
 
 ### 1. 文档目的
 
-本文件用于说明 AntiGEO 当前 release 导出的数据文件、各文件的用途，以及次级项目建议如何理解和消费这些文件。
+本文件用于说明 AntiGEO 当前 release 数据包会导出哪些文件、这些文件分别承担什么作用，以及 consumer 应如何理解和消费这些文件。
 
-### 2. 总体设计思路
+### 2. 当前定位
 
-AntiGEO 当前的 release 数据设计分为两层：
+AntiGEO 当前的 release 数据应理解为 provider package 的一种标准化形态。主项目当前会生成一份 reference package，作为 schema、索引格式、工具链和消费模型的参考实现；其它 provider 也可以按相同格式发布自己的数据包。
+
+因此，这些文件既可以来自主项目，也可以来自任何兼容 AntiGEO 规范的 provider。consumer 面向的是格式兼容的数据源，而不是某一个唯一仓库。
+
+### 3. 总体设计思路
+
+当前 release 数据分为两层：
 
 - 完整聚合数据
-- 面向次级项目消费的轻量实体集合与轻量索引
+- 面向 consumer 的轻量实体集合与轻量索引
 
-前者用于审查、调试和离线分析；后者用于浏览器插件、搜索插件、OpenClaw 插件、本地代理、RAG 中间层等次级项目在运行时做更直接的匹配和治理。
+完整聚合数据适合调试、审查和离线分析。轻量实体集合与索引更适合浏览器插件、搜索插件、OpenClaw 插件、本地代理、RAG 中间层等 consumer 在运行时加载。
 
-### 3. 当前导出文件
+### 4. 当前导出文件
 
 #### `registry/full-index.json`
 
 - 用途：完整聚合数据。
-- 结构：顶层为 object，包含 `version`、`generated_at` 和 `entities`。
-- 适用阶段：适合调试、人工审查、离线分析与全量检查。
+- 结构：顶层 object，包含 `version`、`generated_at`、`entities`。
+- 适用阶段：适合调试、人工审查、离线分析与全量回查。
 
 #### `registry/entities.compact.json`
 
 - 用途：轻量实体集合。
-- 结构：顶层为 array，每条记录仅保留次级项目常用的核心字段。
-- 适用阶段：适合作为次级项目的主加载数据集。
+- 结构：顶层 array，只保留 consumer 常用核心字段。
+- 适用阶段：适合作为运行时主数据集。
 
 #### `registry/manifest.json`
 
-- 用途：release 元信息文件。
-- 结构：顶层为 object，包含版本、生成时间、实体数量、状态计数和文件列表。
-- 适用阶段：适合作为次级项目发现当前有哪些导出文件的入口。
+- 用途：release 元信息与文件发现入口。
+- 结构：顶层 object，包含版本、生成时间、实体数量、状态计数与文件路径映射。
+- 适用阶段：适合作为 consumer 发现当前 provider package 中有哪些产物的入口。
 
 #### `registry/tag-topic-to-entities.json`
 
-- 用途：按主题 tag 召回候选 entity。
-- 结构：顶层为 object，key 为 topic tag，value 为 entity id 数组。
-- 适用阶段：适合搜索前的主题初筛。
+- 用途：按主题标签召回候选 entity。
+- 结构：顶层 object，key 为 topic tag，value 为 entity id 数组。
+- 适用阶段：搜索前初筛。
 
 #### `registry/tag-intent-to-entities.json`
 
-- 用途：按意图 tag 缩小候选 entity 范围。
-- 结构：顶层为 object，key 为 intent tag，value 为 entity id 数组。
-- 适用阶段：适合搜索前的意图初筛。
+- 用途：按意图标签缩小候选 entity 范围。
+- 结构：顶层 object，key 为 intent tag，value 为 entity id 数组。
+- 适用阶段：搜索前初筛。
 
 #### `registry/tag-risk-to-entities.json`
 
-- 用途：提供风险解释和治理辅助。
-- 结构：顶层为 object，key 为 risk tag，value 为 entity id 数组。
-- 适用阶段：适合搜索后解释命中原因，或为治理动作提供辅助上下文。
+- 用途：补充风险解释和治理辅助上下文。
+- 结构：顶层 object，key 为 risk tag，value 为 entity id 数组。
+- 适用阶段：搜索后治理、解释命中原因、辅助下游动作。
 
 #### `registry/domain-to-entities.json`
 
-- 用途：按域名精确命中 entity。
-- 结构：顶层为 object，key 为 domain，value 为 entity id 数组。
-- 适用阶段：适合搜索结果阶段基于 URL 或域名做快速匹配。
+- 用途：按域名命中 entity。
+- 结构：顶层 object，key 为 domain，value 为 entity id 数组。
+- 适用阶段：搜索结果阶段基于 URL 或域名快速命中。
 
 #### `registry/name-to-entities.json`
 
-- 用途：按实体主名称和别名命中 entity。
-- 结构：顶层为 object，key 为名称字符串，value 为 entity id 数组。
-- 适用阶段：适合搜索结果阶段基于标题、摘要或结构化元信息做名称匹配。
+- 用途：按主名称和别名命中 entity。
+- 结构：顶层 object，key 为名称字符串，value 为 entity id 数组。
+- 适用阶段：搜索结果阶段基于标题、摘要或结构化元信息做名称匹配。
 
-### 4. 推荐消费流程
+### 5. 推荐消费流程
 
 当前推荐采用两阶段消费模型。
 
-第一阶段：搜索前
+第一阶段：搜索前初筛
 
-- 从 query 中识别主题与意图。
+- 从 query 中识别主题与意图信号。
 - 使用 `tag-topic-to-entities.json` 与 `tag-intent-to-entities.json` 初筛 candidate entities。
-- 将筛出的 entity id 与 `entities.compact.json` 结合，形成较小的候选治理范围。
+- 将命中的 entity id 映射到 `entities.compact.json`，形成更小的候选治理范围。
 
-第二阶段：搜索后
+第二阶段：搜索后治理
 
-- 对结果 URL、域名、标题、摘要或结构化元信息做匹配。
-- 使用 `domain-to-entities.json` 与 `name-to-entities.json` 命中 entity。
+- 对结果 URL、域名、标题、摘要和结构化元信息做匹配。
+- 使用 `domain-to-entities.json` 与 `name-to-entities.json` 命中相关 entity。
 - 再结合 `entities.compact.json` 中的 `current_status`、`tags_risk`、`summary`、`status_reason` 等字段决定下游治理动作。
 
-### 5. 字段与索引的关系
+`tag-risk-to-entities.json` 更适合作为搜索后解释和治理辅助层，而不是单独替代实体级判断。
 
-- `tags_topic` 对应 `registry/tag-topic-to-entities.json`
-- `tags_intent` 对应 `registry/tag-intent-to-entities.json`
-- `tags_risk` 对应 `registry/tag-risk-to-entities.json`
-- `domains` 对应 `registry/domain-to-entities.json`
-- `name` 与 `aliases` 对应 `registry/name-to-entities.json`
+### 6. 为什么这些文件适合 provider 模式
 
-这些索引都只保存 entity id，而不内嵌完整 entity 数据。次级项目通常应将索引命中的 id 再映射回 `entities.compact.json` 中的对应记录。
+这些 release 文件只描述数据格式、索引方式和最小消费模型，不要求数据内容必须由主项目独占维护。任何 provider 只要遵守相同的 schema、索引结构和构建约定，就可以发布自己的 package。
 
-### 6. 当前范围说明
+这也是当前主项目的定位重点：提供规范、工具链、reference package 和消费建议，而不是要求所有清单都回流到单一中心仓库。
 
-当前 release 数据只覆盖 entity registry 的基础导出。当前结构尚未提供 evidence 或 proposal 的消费索引，也不包含更复杂的发布包装机制。
+### 7. 给 consumer 的简短建议
 
-这意味着当前结构仍处于早期阶段，但已经足以支撑一个最小可用的消费链路：
+- 优先使用 `registry/manifest.json` 发现 provider package 的可用产物。
+- 优先加载 `registry/entities.compact.json` 作为运行时主数据集。
+- 将 `registry/full-index.json` 保留给调试、离线分析和审查。
+- 一般不建议在每次搜索请求中直接加载 `registry/full-index.json` 全量内容。
+- 如果同时订阅多个 provider，建议将主项目或任意 provider 数据都视为输入源，再由本地规则决定最终覆盖结果。
+
+### 8. 当前范围说明
+
+当前 release 数据主要覆盖 entity registry 与其对应的轻量索引导出。evidence 与 proposal 目前已经有 schema 和参考样例数据，但尚未进入当前 release 索引层。
+
+因此，当前结构仍处于早期阶段，但已经足以支撑最小消费链路：
 
 - 搜索前初筛
 - 搜索后命中
 - 基于状态与风险标签的基础治理
-
-### 7. 给次级项目的建议
-
-- 优先使用 `registry/manifest.json` 发现当前可用产物。
-- 优先加载 `registry/entities.compact.json` 作为主消费数据集。
-- 将 `registry/full-index.json` 保留给调试、审查和离线分析。
-- 一般不建议在每次搜索请求中直接加载 `registry/full-index.json` 全量内容。
 
 本说明文档会随着 AntiGEO release 数据结构的演进而继续公开更新。
 
@@ -120,108 +125,113 @@ AntiGEO 当前的 release 数据设计分为两层：
 
 ### 1. Purpose
 
-This document describes the data files currently exported by AntiGEO releases, what each file is for, and how downstream projects are expected to consume them.
+This document explains which files are currently exported as AntiGEO release data, what each file is for, and how consumers are expected to interpret and use them.
 
-### 2. Overall Design
+### 2. Current Positioning
 
-The current AntiGEO release data model has two layers:
+The current AntiGEO release data should be understood as a standardized provider package format. The main repository currently produces a reference package as a reference implementation for schemas, index formats, tooling, and consumption patterns, but other providers may publish their own packages in the same format.
+
+That means these files may come either from the main project or from any AntiGEO-compatible provider. Consumers are designed to work with format-compatible data sources rather than with a single mandatory repository.
+
+### 3. Overall Design
+
+The current release package has two layers:
 
 - full aggregate data
-- lightweight entities and lightweight indexes for downstream consumption
+- lightweight entities and lightweight indexes for consumer use
 
-The first layer is useful for review, debugging, and offline analysis. The second layer is intended for browser extensions, search plugins, OpenClaw plugins, local proxies, RAG middleware, and similar downstream systems that need direct runtime matching and governance support.
+The full aggregate layer is best suited for debugging, review, and offline analysis. The lightweight entity and index layer is better suited for runtime loading by browser extensions, search integrations, OpenClaw plugins, local proxies, RAG middleware, and similar consumers.
 
-### 3. Current Exported Files
+### 4. Current Exported Files
 
 #### `registry/full-index.json`
 
 - Purpose: full aggregate data.
-- Structure: a top-level object containing `version`, `generated_at`, and `entities`.
+- Structure: a top-level object with `version`, `generated_at`, and `entities`.
 - Best use: debugging, human review, offline analysis, and full-record inspection.
 
 #### `registry/entities.compact.json`
 
 - Purpose: lightweight entity collection.
-- Structure: a top-level array where each record keeps only the core fields commonly needed by downstream systems.
-- Best use: the primary runtime dataset for downstream consumers.
+- Structure: a top-level array containing only the core fields commonly needed at runtime.
+- Best use: the primary runtime dataset.
 
 #### `registry/manifest.json`
 
-- Purpose: release metadata.
-- Structure: a top-level object containing version, generation time, entity counts, status counts, and a file list.
-- Best use: the entry point for discovering which exported files are available in the current release.
+- Purpose: release metadata and file discovery.
+- Structure: a top-level object containing version, generation time, entity counts, status counts, and a file map.
+- Best use: the entry point for discovering what outputs exist in a provider package.
 
 #### `registry/tag-topic-to-entities.json`
 
 - Purpose: recall candidate entities by topic tag.
-- Structure: a top-level object mapping topic tags to arrays of entity ids.
-- Best use: topic-level filtering before search or retrieval.
+- Structure: a top-level object mapping topic tags to entity id arrays.
+- Best use: pre-search filtering.
 
 #### `registry/tag-intent-to-entities.json`
 
 - Purpose: narrow candidate entities by intent tag.
-- Structure: a top-level object mapping intent tags to arrays of entity ids.
-- Best use: intent-level filtering before search or retrieval.
+- Structure: a top-level object mapping intent tags to entity id arrays.
+- Best use: pre-search filtering.
 
 #### `registry/tag-risk-to-entities.json`
 
-- Purpose: provide risk explanation and governance support.
-- Structure: a top-level object mapping risk tags to arrays of entity ids.
-- Best use: post-search interpretation and governance context.
+- Purpose: provide risk explanation and governance context.
+- Structure: a top-level object mapping risk tags to entity id arrays.
+- Best use: post-search governance and explanation support.
 
 #### `registry/domain-to-entities.json`
 
 - Purpose: match entities by domain.
-- Structure: a top-level object mapping domains to arrays of entity ids.
-- Best use: fast matching during result-stage URL or domain processing.
+- Structure: a top-level object mapping domains to entity id arrays.
+- Best use: fast result-stage matching based on URL or domain.
 
 #### `registry/name-to-entities.json`
 
 - Purpose: match entities by primary name and aliases.
-- Structure: a top-level object mapping names to arrays of entity ids.
+- Structure: a top-level object mapping names to entity id arrays.
 - Best use: result-stage matching against titles, snippets, or structured metadata.
 
-### 4. Recommended Consumption Flow
+### 5. Recommended Consumption Flow
 
 The current recommendation is a two-stage consumption model.
 
-Stage 1: before search
+Stage 1: pre-search filtering
 
 - Identify topic and intent signals from the query.
-- Use `tag-topic-to-entities.json` and `tag-intent-to-entities.json` to narrow the candidate entity set.
-- Join the resulting entity ids with `entities.compact.json` to produce a smaller governance candidate set.
+- Use `tag-topic-to-entities.json` and `tag-intent-to-entities.json` to narrow the candidate set.
+- Map the matched entity ids into `entities.compact.json` to form a smaller governance candidate set.
 
-Stage 2: after search
+Stage 2: post-search governance
 
-- Match against result URLs, domains, titles, snippets, or structured metadata.
+- Match against result URLs, domains, titles, snippets, and structured metadata.
 - Use `domain-to-entities.json` and `name-to-entities.json` to identify relevant entities.
-- Then use fields such as `current_status`, `tags_risk`, `summary`, and `status_reason` from `entities.compact.json` to determine downstream governance behavior.
+- Then use fields such as `current_status`, `tags_risk`, `summary`, and `status_reason` from `entities.compact.json` to decide downstream governance behavior.
 
-### 5. Relationship Between Fields and Indexes
+`tag-risk-to-entities.json` is better treated as a post-search explanation and governance-support layer than as a replacement for entity-level judgment.
 
-- `tags_topic` maps to `registry/tag-topic-to-entities.json`
-- `tags_intent` maps to `registry/tag-intent-to-entities.json`
-- `tags_risk` maps to `registry/tag-risk-to-entities.json`
-- `domains` maps to `registry/domain-to-entities.json`
-- `name` and `aliases` map to `registry/name-to-entities.json`
+### 6. Why These Files Fit The Provider Model
 
-These indexes store only entity ids rather than full entity records. In most cases, downstream systems should map matched ids back to the corresponding records in `entities.compact.json`.
+These release files describe data formats, indexing patterns, and a minimal consumption model. They do not require registry content to be maintained only by the main project. Any provider that follows the same schemas, index structures, and build conventions can publish its own package.
 
-### 6. Current Scope
+That is also the current emphasis of the main project: provide specifications, tooling, a reference package, and consumption guidance rather than require all registry content to flow through a single central repository.
 
-The current release data covers only the foundational entity registry exports. It does not yet provide consumer indexes for evidence or proposals, and it does not introduce more complex release packaging mechanisms.
+### 7. Short Guidance For Consumers
 
-That means the structure is still early-stage, but it is already sufficient for a minimal downstream workflow:
-
-- pre-search candidate filtering
-- post-search entity matching
-- basic governance based on status and risk tags
-
-### 7. Suggestions for Downstream Projects
-
-- Use `registry/manifest.json` first to discover available outputs.
+- Use `registry/manifest.json` first to discover the outputs in a provider package.
 - Prefer `registry/entities.compact.json` as the primary runtime dataset.
 - Keep `registry/full-index.json` for debugging, review, and offline analysis.
 - In most cases, avoid loading the full contents of `registry/full-index.json` on every search request.
+- If you subscribe to multiple providers, treat both the main project and third-party providers as input sources, then let local rules determine the final override outcome.
+
+### 8. Current Scope
+
+The current release layer mainly covers the entity registry and its lightweight indexes. Evidence and proposal data already have schemas and sample records, but they are not yet part of the current release index layer.
+
+The structure is therefore still early-stage, but it is already sufficient for a minimal workflow:
+
+- pre-search filtering
+- post-search matching
+- basic governance based on status and risk tags
 
 This document will continue to be updated publicly as the AntiGEO release data structure evolves.

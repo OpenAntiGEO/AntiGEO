@@ -6,174 +6,152 @@
 
 ## 中文
 
-AntiGEO 是由 **OpenAntiGEO** 维护的开源、可审计、社区治理的 **GEO 操纵风险清单（registry）**。它用于帮助 AI 搜索、检索增强系统、答案引擎与智能体（Agent）识别可能存在系统性操纵风险的品牌、域名、内容网络与相关实体。
+AntiGEO 是一个开源、可审计、社区治理的 GEO 风险清单规范与参考实现项目。主项目当前重点提供数据结构规范、索引与 release 数据格式、校验与构建工具、参考样例数据，以及面向 consumer 的消费模型与覆盖优先级建议。
 
-本仓库主项目仅维护规则、清单、证据、提案、投票与申诉，不承载面向终端用户的插件或 SDK 实现。
+AntiGEO 主项目并不追求维护唯一、中心化、全局权威的名单。具体风险清单可以由不同 provider 独立发布；consumer 与用户可以自行选择信任并订阅哪些 provider；用户本地白名单、本地 blocklist 和本地 override 的优先级应高于外部 provider 数据。
 
-## 项目范围
+## 主项目提供什么
 
-本仓库当前包含以下内容：
+- `schemas/`：entity、evidence、proposal 等数据结构规范。
+- `scripts/`：当前的构建与校验工具，用于生成和检查 reference package。
+- `registry/`：当前 reference package 的 entity 样例与 release 导出。
+- `evidence/` 与 `proposals/`：与 entity 关联的参考样例数据。
+- `docs/`：定义、治理、provider 模式、release 数据格式和消费建议。
 
-- 规则与定义
-- 风险清单
-- 可复核证据
-- 社区提案
-- 投票记录
-- 申诉材料与处理规则
+当前仓库中的 registry、sample evidence、sample proposals 以及 build 生成的导出文件，都应理解为 reference implementation / reference package，而不是唯一官方裁决结果。
 
-以下内容不在本仓库内实现，均应作为独立子项目维护：
+## Provider 模式
 
-- 浏览器插件
-- 搜索插件 / 搜索适配器
-- OpenClaw 插件
-- SDK
+在 AntiGEO 里，provider 指的是按 AntiGEO 规范发布数据包的开发者、团队或社区维护数据源。不同 provider 可以共享同一套 schema、索引格式和消费模型，但维护各自的数据内容、审核节奏和治理实践。
 
-## 状态定义
+这意味着 consumer 面向的是“符合 AntiGEO 格式的数据源”，而不是必须依赖主项目自身仓库。主项目当前可以被视为一个 reference provider / reference package，但并不垄断具体清单内容。
 
-仓库当前只使用三种状态：
+## 用户控制优先级
 
-- `watchlist`：已有一定证据，说明对象存在 GEO 操纵嫌疑，需要继续观察。
-- `restricted`：证据较充分，说明对象存在较明显的系统性操纵风险，建议下游系统降权、弱化或显著标记。
-- `blocked`：证据强且相对明确，说明对象属于高风险 GEO 操纵源，建议下游系统默认忽略，除非用户本地豁免。
+AntiGEO 关心的是可互操作的数据格式与消费模型，不替用户夺走最终控制权。当前推荐的优先级思想是：
 
-## 治理流程
+1. 用户本地白名单
+2. 用户本地 blocklist
+3. 用户本地 override
+4. 外部 provider 数据
 
-项目采用基于证据的社区治理流程：
+主项目和 provider 都只是输入源；最终采用哪份数据、如何合并、如何覆盖，应由 consumer 或终端用户决定。
 
-1. 提交可复核证据。
-2. 社区审核证据是否真实、是否符合定义。
-3. 通过投票决定进入何种状态。
-
-## 仓库结构
+## 当前仓库内容
 
 ```text
 AntiGEO/
-├── docs/        项目说明、定义、治理、投票、申诉等文档
-├── schemas/     清单、证据、提案等数据结构定义
-├── registry/    状态清单与聚合索引
-├── proposals/   社区提案
-├── evidence/    证据材料
-└── scripts/     辅助脚本
+├── docs/        项目说明、定义、治理、provider 模式、release 数据说明
+├── schemas/     entity、evidence、proposal 等数据结构规范
+├── registry/    reference registry 与 release 导出
+├── evidence/    reference evidence 样例
+├── proposals/   reference proposal 样例
+└── scripts/     构建与校验工具
 ```
 
-当前目录用途说明：
+当前已经建立的主干包括：
 
-- `docs/`：存放定义、治理、证据政策、投票与申诉等说明文档。
-- `schemas/`：存放实体、证据、提案等 JSON Schema。
-- `registry/`：存放 `watchlist`、`restricted`、`blocked` 状态清单及聚合索引。
-- `proposals/`：存放待审议或历史提案。
-- `evidence/`：存放支撑提案与状态判断的证据材料。
-- `scripts/`：存放校验、整理、生成等辅助脚本。
+- entity / evidence / proposal 的基础 schema
+- reference entity registry 与 compact/index/release 导出
+- 基础 build / validate 链路
+- 搜索前初筛与搜索后治理的最小消费模型
 
-## 项目状态
+其中 evidence / proposal 当前仍主要处于治理与审查层的参考样例状态；build / validate 目前主要围绕 entity registry 与 release 数据层。
 
-本项目仍处于**早期初始化阶段**。当前仓库以基础规则、数据结构、清单约定和治理流程搭建为主；目录、格式与流程在保持可审计性的前提下，仍可能继续收敛和调整。
-
-## 快速开始
+## 从哪里开始
 
 - [快速开始](./docs/quick-start.md)
-
-## Release 数据
-
 - [Release 数据说明](./docs/release-data.md)
-
-## 相关文档
-
+- [Provider 模式](./docs/provider-model.md)
 - [定义说明](./docs/definition.md)
 - [治理规则](./docs/governance.md)
 - [证据政策](./docs/evidence-policy.md)
-- [投票机制](./docs/voting.md)
+- [投票规则](./docs/voting.md)
 - [申诉说明](./docs/appeals.md)
 - [常见问题](./docs/faq.md)
+- [贡献指南](./CONTRIBUTING.md)
+
+## 项目状态
+
+AntiGEO 仍处于早期阶段，但主干框架已经建立。当前主项目更像一个规范层、参考实现和参考数据包，而不是单一中心化名单服务。随着后续实践，schema、reference package、provider model 文档和消费建议都可能继续公开收敛与完善。
 
 ## 许可与协作
 
-许可证与贡献流程请分别参见 [LICENSE](./LICENSE) 和 [CONTRIBUTING.md](./CONTRIBUTING.md)。治理相关细则以 `docs/` 目录下正式文档为准。
+许可证与贡献方式请分别参见 [LICENSE](./LICENSE) 和 [CONTRIBUTING.md](./CONTRIBUTING.md)。如需理解当前 release 导出与 provider 关系，建议优先阅读 [docs/release-data.md](./docs/release-data.md) 与 [docs/provider-model.md](./docs/provider-model.md)。
 
 ---
 
 ## English
 
-AntiGEO is an open, auditable, community-governed **GEO manipulation risk registry** maintained by **OpenAntiGEO**. It helps AI search, retrieval-augmented systems, answer engines, and agents identify brands, domains, content networks, and related entities that may present systematic manipulation risk.
+AntiGEO is an open, auditable, community-governed GEO risk registry specification and reference implementation project. The main repository currently focuses on data schemas, index and release data formats, validation and build tools, sample reference data, and consumption guidance for downstream consumers.
 
-The main repository is limited to rules, registries, evidence, proposals, voting, and appeals. It does not host end-user extensions or SDK implementations.
+The main project does not aim to maintain a single centralized or globally authoritative list. Concrete risk registries may be published by different providers; consumers and users may choose which providers to trust and subscribe to; and local user allowlists, local blocklists, and local overrides should take precedence over external provider data.
 
-## Scope
+## What The Main Project Provides
 
-The main repository is limited to the following:
+- `schemas/`: structural specifications for entities, evidence, proposals, and related records.
+- `scripts/`: the current build and validation tools used to produce and check a reference package.
+- `registry/`: the current reference entity package and release exports.
+- `evidence/` and `proposals/`: sample reference data linked to the entity layer.
+- `docs/`: definitions, governance, provider model, release data format, and consumption guidance.
 
-- Rules and definitions
-- Risk registries
-- Verifiable evidence
-- Community proposals
-- Voting records
-- Appeals materials and procedures
+The registry data, sample evidence, sample proposals, and build outputs in this repository should be understood as a reference implementation / reference package rather than as a single official final record.
 
-The following are not implemented in this repository and should be maintained as separate subprojects:
+## Provider Model
 
-- Browser extension
-- Search plugins
-- OpenClaw plugin
-- SDKs
+Within AntiGEO, a provider is a developer, team, or community-maintained data source that publishes packages in AntiGEO-compatible formats. Different providers may share the same schemas, index formats, and consumption model while maintaining their own record contents, review cadence, and governance practices.
 
-## Status Definitions
+That means consumers are designed to work with any AntiGEO-compatible data source, not only with the main repository. The main repository can currently be treated as a reference provider / reference package, but it does not monopolize registry content.
 
-This repository uses only three statuses:
+## User Control Priority
 
-- `watchlist`: there is some evidence indicating possible GEO manipulation risk and the subject requires continued observation.
-- `restricted`: the evidence is relatively substantial and indicates a clearer pattern of systematic manipulation risk; downstream systems are advised to downrank, de-emphasize, or clearly label the subject.
-- `blocked`: the evidence is strong and comparatively clear; the subject is considered a high-risk GEO manipulation source, and downstream systems are advised to ignore it by default unless a local user override applies.
+AntiGEO is designed around interoperable formats and consumer control, not around taking final control away from the user. The current recommended priority model is:
 
-## Governance Process
+1. local user allowlist
+2. local user blocklist
+3. local user override
+4. external provider data
 
-The project follows an evidence-based community governance process:
+Both the main project and third-party providers are input sources. The final decision about what to load, merge, trust, or override should remain with the consumer or end user.
 
-1. Submit verifiable evidence.
-2. The community reviews whether the evidence is authentic and whether it meets the project definitions.
-3. A vote determines which status, if any, should be assigned.
-
-## Repository Structure
+## Repository Contents
 
 ```text
 AntiGEO/
-├── docs/        Project documents, definitions, governance, voting, appeals
-├── schemas/     Data schemas for registries, evidence, and proposals
-├── registry/    Status lists and aggregate indexes
-├── proposals/   Community proposals
-├── evidence/    Evidence materials
-└── scripts/     Supporting scripts
+├── docs/        project documents, definitions, governance, provider model, release data
+├── schemas/     schemas for entities, evidence, proposals, and related records
+├── registry/    reference registry and release exports
+├── evidence/    reference evidence samples
+├── proposals/   reference proposal samples
+└── scripts/     build and validation tools
 ```
 
-Directory overview:
+The current backbone already includes:
 
-- `docs/`: definitions, governance, evidence policy, voting, appeals, and related documentation.
-- `schemas/`: JSON Schema files for entities, evidence, proposals, and related data.
-- `registry/`: `watchlist`, `restricted`, `blocked`, and aggregate indexes.
-- `proposals/`: pending and historical proposals.
-- `evidence/`: evidence supporting proposals and status decisions.
-- `scripts/`: helper scripts for validation, processing, and generation.
+- foundational schemas for entity / evidence / proposal
+- a reference entity registry plus compact, indexed, and release-style exports
+- a basic build / validate workflow
+- a minimal two-stage consumption model for pre-search filtering and post-search governance
 
-## Project Status
+At the moment, evidence and proposal data are still primarily sample material for governance and review. The build / validate workflow is currently centered on the entity registry and release-data layer.
 
-This project is still in the **early initialization stage**. At this stage, the repository is focused on establishing baseline rules, data structures, registry conventions, and governance procedures. Directory layout, formats, and process details may continue to evolve while preserving auditability.
-
-## Quick Start
+## Where To Start
 
 - [Quick Start](./docs/quick-start.md)
-
-## Release Data
-
 - [Release Data](./docs/release-data.md)
-
-## Documents
-
+- [Provider Model](./docs/provider-model.md)
 - [Definitions](./docs/definition.md)
 - [Governance](./docs/governance.md)
 - [Evidence Policy](./docs/evidence-policy.md)
 - [Voting](./docs/voting.md)
 - [Appeals](./docs/appeals.md)
 - [FAQ](./docs/faq.md)
+- [Contributing](./CONTRIBUTING.md)
+
+## Project Status
+
+AntiGEO is still early-stage, but the main structural backbone is now in place. At this stage, the project should be read primarily as a specification layer, reference implementation, and reference package rather than as a single centralized registry service. Schemas, reference package structure, provider-model documentation, and consumption guidance may continue to evolve publicly over time.
 
 ## License and Collaboration
 
-For licensing and contribution procedures, see [LICENSE](./LICENSE) and [CONTRIBUTING.md](./CONTRIBUTING.md). Governance-related rules are defined by the formal documents under `docs/`.
+For licensing and contribution guidance, see [LICENSE](./LICENSE) and [CONTRIBUTING.md](./CONTRIBUTING.md). For the current relationship between release outputs and providers, start with [docs/release-data.md](./docs/release-data.md) and [docs/provider-model.md](./docs/provider-model.md).
